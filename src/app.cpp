@@ -395,8 +395,9 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
     const sf::Vector2f mousePosition = static_cast<sf::Vector2f>(mouseEvent.position);
 
     if (ui.prePlayLayout.startGameButton.bounds.contains(mousePosition)) {
-        // fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-        game = Game("8/8/8/4k3/8/8/8/5KBN w - - 0 1", playerChoices);
+        // starting: 
+        // KNBvK: 8/8/8/4k3/8/8/8/5KBN w - - 0 1
+        game = Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", playerChoices);
         renderer.playerSide = game.playerSide;
         currentState = GameState::Playing;
         frameClock.restart();
