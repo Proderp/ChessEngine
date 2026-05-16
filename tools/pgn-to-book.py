@@ -19,7 +19,7 @@ for source in sources:
     print(f"\nFound {len(pgn_files)} files in {source['folder']}!")
 
     for filename in pgn_files:
-        print(f"Turbo-Parsing {filename} with weight {source['weight']}...")
+        print(f"Parsing {filename} with weight {source['weight']}...")
         games_kept = 0
         games_skipped = 0
         
@@ -73,9 +73,9 @@ for source in sources:
         print(f"Finished {filename}! Kept {games_kept} games (Skipped {games_skipped}).")
 
 print(f"\nTotal unique board positions found: {len(book)}")
-print("Pruning blunders and writing to file...")
+print("Writing to file...")
 
-with open("opening-book-file_v2.txt", "w", encoding="utf-8") as out:
+with open("opening-book-file.txt", "w", encoding="utf-8") as out:
     for fen, moves in book.items():
         valid_moves = []
         for move, votes in moves.items():
@@ -85,4 +85,4 @@ with open("opening-book-file_v2.txt", "w", encoding="utf-8") as out:
         if valid_moves:
             out.write(f"{fen} {' '.join(valid_moves)}\n")
 
-print("Saved to opening-book-file_v2.txt!")
+print("Saved to opening-book-file.txt!")
