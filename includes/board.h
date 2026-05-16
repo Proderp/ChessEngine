@@ -103,9 +103,6 @@ public:
 
 	std::string generateFenString();
 
-	long long perft(int depth);
-	void perftDivide(int depth);
-
 	void evaluate();
 	int getMopUpScore(Side winningSide) const;
 	float getEndgameFactor() const;
@@ -115,7 +112,6 @@ public:
 	void loadEnPassantPart(const std::string& enPassantPart);
 	void loadBoardPart(const std::string& boardPart, bool whiteKingSide, bool whiteQueenSide, bool blackKingSide, bool blackQueenSide);
 	void loadOpeningBook();
-	void loadTablebases();
 
 	int getCurrentEvaluation() const;
 };

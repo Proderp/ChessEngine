@@ -10,7 +10,6 @@ Game::Game(const std::string& fen, const PlayerChoices& playerChoices) {
 	BOARD.loadFen(fen);
 	
 	BOARD.loadOpeningBook();
-	BOARD.loadTablebases();
 
 	BOARD.countMaterial();
 	checkWinner();
@@ -329,15 +328,6 @@ void Game::handleTimeout(const Side loser) {
 	else {
 		findWinner(Side::White);
 	}
-}
-
-void Game::checkPerftTests(const int depth) {
-	std::cout << "Evaluation Before Perft: " << BOARD.getCurrentEvaluation() << std::endl;
-	std::cout << "Depth " << depth << ": " << BOARD.perft(depth) << std::endl;
-	std::cout << "==========================" << std::endl;
-	BOARD.perftDivide(depth);
-	std::cout << "==========================" << std::endl;
-	std::cout << "Evaluation After Perft: " << BOARD.getCurrentEvaluation() << std::endl;
 }
 
 const std::vector<Turn>& Game::getMoveHistory() const {

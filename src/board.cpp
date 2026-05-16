@@ -427,7 +427,7 @@ void Board::makeTempMove(const Move& move, std::optional<Piece>& capturedPiece) 
 	fromSquare.piece.reset();
 }
 
-void Board::updateMaterialCount (const Piece& piece, const int rank, const int file, const int amount) {
+void Board::updateMaterialCount(const Piece& piece, const int rank, const int file, const int amount) {
 	Material& materialSide = (piece.side == Side::White) ? boardMaterial.white : boardMaterial.black;
 
 	switch (piece.type) {
@@ -1191,55 +1191,6 @@ bool Board::canSideCheckmate(const Side& side) const {
 	return false;
 }
 
-long long Board::perft(int depth) {
-	if (depth == 0) {
-		return 1;
-	}
-
-	long long nodes = 0;
-
-	std::vector<Move> moves = generateEveryLegalMove(currentTurn);
-
-	for (const Move& move : moves) {
-		std::optional<Piece> capturedPiece = std::nullopt;
-		makeTempMove(move, capturedPiece);
-
-		currentTurn = (currentTurn == Side::White) ? Side::Black : Side::White;
-
-		nodes += perft(depth - 1);
-
-		currentTurn = (currentTurn == Side::White) ? Side::Black : Side::White;
-
-		unmakeMove(move, capturedPiece);
-	}
-
-	return nodes;
-}
-
-void Board::perftDivide(int depth) {
-	long long totalNodes = 0;
-	std::vector<Move> moves = generateEveryLegalMove(currentTurn);
-
-	for (const Move& move : moves) {
-		std::optional<Piece> capturedPiece = std::nullopt;
-		makeTempMove(move, capturedPiece);
-
-		currentTurn = (currentTurn == Side::White) ? Side::Black : Side::White;
-
-		long long nodes = perft(depth - 1);
-
-		currentTurn = (currentTurn == Side::White) ? Side::Black : Side::White;
-
-		unmakeMove(move, capturedPiece);
-
-		std::cout << "Move " << move.fromRank << "," << move.fromFile << " to "
-			<< move.toRank << "," << move.toFile << ": " << nodes << " branches\n";
-
-		totalNodes += nodes;
-	}
-	std::cout << "\nTotal Nodes: " << totalNodes << "\n";
-}
-
 void Board::evaluate() {
 	int whiteMaterial = 0;
 	int blackMaterial = 0;
@@ -1489,7 +1440,7 @@ void Board::loadBoardPart(const std::string& boardPart, bool whiteKingSide, bool
 }
 
 void Board::loadOpeningBook() {
-	std::ifstream openingBookFile("opening-book/opening-book-file.txt");
+	std::ifstream openingBookFile("data/opening-book-file.txt");
 	std::string line;
 
 	while (std::getline(openingBookFile, line)) {
@@ -1523,12 +1474,6 @@ void Board::loadOpeningBook() {
 	}
 
 	openingBookFile.close();
-}
-
-void Board::loadTablebases() {
-	if (!tb_init("syzygy/wdl;syzygy/dtz")) {
-		std::cerr << "Error loading syzygy" << std::endl;
-	}
 }
 
 int Board::getMopUpScore(Side winningSide) const {

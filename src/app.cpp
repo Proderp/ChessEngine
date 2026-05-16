@@ -5,6 +5,8 @@ App::App() : window(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT 
              boardMetrics(renderer.getBoardMetrics()),
              historyViewportMetrics(renderer.getHistoryViewportMetrics())
 {
+    window.setFramerateLimit(60); 
+
     boardView = window.getDefaultView();
 
     uiView = window.getDefaultView();
@@ -14,7 +16,7 @@ App::App() : window(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT 
     historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
     historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
 
-    if (windowIcon.loadFromFile("assets/images/window-icon.png")) {
+    if (windowIcon.loadFromFile("assets/window/window-icon.png")) {
         window.setIcon(windowIcon);
     }
 
@@ -393,7 +395,8 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
     const sf::Vector2f mousePosition = static_cast<sf::Vector2f>(mouseEvent.position);
 
     if (ui.prePlayLayout.startGameButton.bounds.contains(mousePosition)) {
-        game = Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", playerChoices);
+        // fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+        game = Game("8/8/8/4k3/8/8/8/5KBN w - - 0 1", playerChoices);
         renderer.playerSide = game.playerSide;
         currentState = GameState::Playing;
         frameClock.restart();

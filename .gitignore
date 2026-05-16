@@ -1,2 +1,11 @@
+# Ignore VS Code's Directory
+.vscode/
+
 # Ignore the syzygy tablebase
 data/syzygy/
+
+# Ignore CMake's build directory
+build/
+
+# Ignore personal .ps1 scripts
+*.ps1
