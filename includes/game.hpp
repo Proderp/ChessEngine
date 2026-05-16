@@ -1,7 +1,7 @@
 #pragma once
-#include "includes.h"
-#include "game-elements.h"
-#include "board.h"
+#include "includes.hpp"
+#include "game-elements.hpp"
+#include "board.hpp"
 
 class Game {
 private:

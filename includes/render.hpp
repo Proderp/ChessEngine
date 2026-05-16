@@ -1,6 +1,6 @@
 #pragma once
-#include "includes.h"
-#include "game.h"
+#include "includes.hpp"
+#include "game.hpp"
 
 class Render {
 private:

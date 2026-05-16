@@ -1,4 +1,4 @@
-#include "render.h"
+#include "render.hpp"
 
 Render::Render(sf::RenderWindow& window, const Side playerSide) : 
 	window(window), 

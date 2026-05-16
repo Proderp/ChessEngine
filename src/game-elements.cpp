@@ -1,4 +1,4 @@
-#include "game-elements.h"
+#include "game-elements.hpp"
 
 Piece::Piece() : side(Side::White), type(PieceType::Pawn), hasMoved(false) {}
 

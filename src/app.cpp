@@ -1,4 +1,4 @@
-#include "app.h"
+#include "app.hpp"
 
 App::App() : window(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT }), "Chess"),
              renderer(window, game.playerSide),

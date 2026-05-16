@@ -1,6 +1,6 @@
 #pragma once
-#include "includes.h"
-#include "game-elements.h"
+#include "includes.hpp"
+#include "game-elements.hpp"
 
 class Board {
 private:

@@ -1,4 +1,4 @@
-#include "board.h"
+#include "board.hpp"
 
 std::atomic<bool> Board::abortSearch{ false };
 

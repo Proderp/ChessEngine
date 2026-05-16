@@ -1,7 +1,7 @@
 #pragma once
-#include "game.h"
-#include "render.h"
-#include "includes.h"
+#include "game.hpp"
+#include "render.hpp"
+#include "includes.hpp"
 
 class App {
 private:
