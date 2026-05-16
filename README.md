@@ -142,6 +142,7 @@ We initially made this project as an advanced project submission for the class. 
 - [SFML](https://www.sfml-dev.org/) - The underlying C++ multimedia API I used for graphics rendering.
 - [PGN Mentor](https://www.pgnmentor.com/) - A wonderful database of PGN files! I used this for thousands of grandmaster games to create my opening book!
 - [Lichess Elite Database](https://database.nikonoel.fr/) - Another great tool for accessing millions of online chess games, which I also used for my opening book!
+- [Fathom](https://github.com/jdart1/Fathom) - Probes the Syzygy tablebase for WDL and DTZ.
 - [Syzygy Tablebase Downloader](https://github.com/jj-jaguar/Syzygy-Tablebase-Downloader) - Allowed me to easily and seamlessly download the Syzygy tablebases. I wouldn't have been able to implement perfect endgames without it!
 - [Iosevka Charon](https://github.com/jul-sh/iosevka-charon) - The font I utilized for its perfect fit in this program.
 
