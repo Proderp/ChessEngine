@@ -25,6 +25,8 @@ public:
 
     UI(const sf::Vector2f& windowSize);
 
+    void setUIElements();
+
     Button resignationButton;
     
     PromoMenuLayout promoMenuLayout;	

@@ -1,8 +1,26 @@
-#include "hpp"
+#include "ui.hpp"
 
 UI::UI(const sf::Vector2f& windowSize) :
     windowSize(windowSize)
 {}
+
+void UI::setUIElements() {
+    resizeResignationButton();
+
+    resizeResignationConfirmationLayout();
+
+    resizeLayoutButtons();
+
+    resizePromoLayout();
+    recalculateMoveHistorySize();
+
+    resizeMainMenuLayout();
+    
+    resizePrePlayLayout();
+    resizeSettingsLayout();
+
+    resizeGameOverLayout();
+}
 
 void UI::resizeResignationButton() {
     resignationButton.position = { renderer.getWindowWidth() - boardMetrics.tileSize, renderer.getWindowHeight() - boardMetrics.offsetY};

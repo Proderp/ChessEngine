@@ -146,24 +146,6 @@ void App::handleResize(const unsigned int windowWidth, const unsigned int window
     recalibrateViews(windowWidth, windowHeight);
 }
 
-void App::setUIElements() {
-    resizeResignationButton();
-
-    resizeResignationConfirmationLayout();
-
-    resizeLayoutButtons();
-
-    resizePromoLayout();
-    recalculateMoveHistorySize();
-
-    resizeMainMenuLayout();
-    
-    resizePrePlayLayout();
-    resizeSettingsLayout();
-
-    resizeGameOverLayout();
-}
-
 void App::recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight) {
     const sf::Vector2f centerOfWindow = { static_cast<float>(windowWidth) / 2.f, static_cast<float>(windowHeight) / 2.f };
     const sf::Vector2f sizeOfWindow = static_cast<sf::Vector2f>(sf::Vector2u{windowWidth, windowHeight});
