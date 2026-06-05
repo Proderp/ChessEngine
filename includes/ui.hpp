@@ -3,7 +3,30 @@
 
 class UI {
 private:
-	void resizeResignationButton();
+    sf::RenderWindow& window;
+    const sf::Vector2f& windowSize;
+
+    sf::View boardView;
+	sf::View uiView;
+	sf::View historyView;
+
+    Button resignationButton;
+    
+    PromoMenuLayout promoMenuLayout;	
+	ResignationConfirmationLayout resignationConfirmationLayout;
+	
+    MainMenuLayout mainMenuLayout;
+	PrePlayLayout prePlayLayout;
+	SettingsLayout settingsLayout;
+	GameOverLayout gameOverLayout;
+
+    HistoryViewportMetrics historyViewportMetrics;
+	BoardMetrics boardMetrics;
+
+    void handleResize(const unsigned int windowWidth, const unsigned int windowHeight);
+	void recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight);
+
+    void resizeResignationButton();
 	
 	void resizeResignationConfirmationLayout();
 	void resizeLayoutButtons();
@@ -21,22 +44,7 @@ private:
 	void resizeGameOverLayout();
 
 public:
-    const sf::Vector2f& windowSize;
+    UI(sf::RenderWindow& window, const sf::Vector2f& windowSize);
 
-    UI(const sf::Vector2f& windowSize);
-
-    void setUIElements();
-
-    Button resignationButton;
-    
-    PromoMenuLayout promoMenuLayout;	
-	ResignationConfirmationLayout resignationConfirmationLayout;
-	
-    MainMenuLayout mainMenuLayout;
-	PrePlayLayout prePlayLayout;
-	SettingsLayout settingsLayout;
-	GameOverLayout gameOverLayout;
-
-    HistoryViewportMetrics historyViewportMetrics;
-	BoardMetrics boardMetrics;
+    void updateUI();
 };

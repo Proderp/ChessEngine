@@ -10,15 +10,7 @@ private:
 
 	Game game;
 	Render renderer;
-
-	UIContainer ui;
-	const BoardMetrics& boardMetrics;
-	const HistoryViewportMetrics& historyViewportMetrics;
-
-	sf::View boardView;
-	sf::View uiView;
-	sf::View historyView;
-
+	
 	sf::Clock frameClock;
 
 	PlayerChoices playerChoices;
@@ -37,11 +29,7 @@ private:
 	sf::Vector2f secondaryAnimatedPosition;
 
 	sf::Image windowIcon;
-
-	void handleResize(const unsigned int windowWidth, const unsigned int windowHeight);
-	void setUIElements();
-	void recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight);
-
+	
 	void handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent);
 
 	void handleLeftClick(const sf::Event::MouseButtonPressed& mouseEvent);

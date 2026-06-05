@@ -1,9 +1,10 @@
 #include "app.hpp"
 
-App::App() : window(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT }), "Chess"),
-             renderer(window, game.playerSide),
-             boardMetrics(renderer.getBoardMetrics()),
-             historyViewportMetrics(renderer.getHistoryViewportMetrics())
+App::App() : 
+    window(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT }), "Chess"),
+    renderer(window, game.playerSide),
+    boardMetrics(renderer.getBoardMetrics()),
+    historyViewportMetrics(renderer.getHistoryViewportMetrics())
 {
     window.setFramerateLimit(60); 
 
@@ -138,27 +139,6 @@ void App::handleEvents() {
             }
         }
     }
-}
-
-void App::handleResize(const unsigned int windowWidth, const unsigned int windowHeight) {
-    renderer.setInfo(windowWidth, windowHeight);
-    setUIElements();
-    recalibrateViews(windowWidth, windowHeight);
-}
-
-void App::recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight) {
-    const sf::Vector2f centerOfWindow = { static_cast<float>(windowWidth) / 2.f, static_cast<float>(windowHeight) / 2.f };
-    const sf::Vector2f sizeOfWindow = static_cast<sf::Vector2f>(sf::Vector2u{windowWidth, windowHeight});
-
-    boardView.setCenter(centerOfWindow);
-    boardView.setSize(sizeOfWindow);
-
-    uiView.setCenter(centerOfWindow);
-    uiView.setSize(sizeOfWindow);
-
-    historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
-    historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
-    historyView.setViewport(renderer.getHistoryViewport());
 }
 
 void App::handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent) {
