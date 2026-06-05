@@ -3,9 +3,28 @@
 
 class UI {
 private:
+	void resizeResignationButton();
+	
+	void resizeResignationConfirmationLayout();
+	void resizeLayoutButtons();
+	void resizeLayoutButtonBounds();
 
+	void resizePromoLayout();
+	void recalculateMoveHistorySize();
+
+	void resizeMainMenuLayout();
+	void resizeButtonBounds(Button& button);
+
+	void resizePrePlayLayout();
+	void resizeSettingsLayout();
+
+	void resizeGameOverLayout();
 
 public:
+    const sf::Vector2f& windowSize;
+
+    UI(const sf::Vector2f& windowSize);
+
     Button resignationButton;
     
     PromoMenuLayout promoMenuLayout;	

@@ -42,23 +42,6 @@ private:
 	void setUIElements();
 	void recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight);
 
-	void resizeResignationButton();
-	
-	void resizeResignationConfirmationLayout();
-	void resizeLayoutButtons();
-	void resizeLayoutButtonBounds();
-
-	void resizePromoLayout();
-	void recalculateMoveHistorySize();
-
-	void resizeMainMenuLayout();
-	void resizeButtonBounds(Button& button);
-
-	void resizePrePlayLayout();
-	void resizeSettingsLayout();
-
-	void resizeGameOverLayout();
-
 	void handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent);
 
 	void handleLeftClick(const sf::Event::MouseButtonPressed& mouseEvent);
