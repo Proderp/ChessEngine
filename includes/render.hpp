@@ -5,9 +5,7 @@
 class Render {
 private:
 	const ColourContainer colours;
-	HistoryViewportMetrics historyViewportMetrics;
-	BoardMetrics boardMetrics;
-	
+		
 	sf::Font font;
 	std::array<sf::Texture, 3> sideChoiceTextures;
 	std::array<sf::Texture, 2> opponentChoiceTextures;
