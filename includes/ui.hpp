@@ -23,6 +23,10 @@ private:
     HistoryViewportMetrics historyViewportMetrics;
 	BoardMetrics boardMetrics;
 
+	const float margin{16.f};
+	const float padding{10.f};
+	const float spacing{10.f};
+
     void handleResize(const unsigned int windowWidth, const unsigned int windowHeight);
 	void recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight);
 

@@ -121,10 +121,6 @@ private:
 	float windowWidth = DEFAULT_WINDOW_WIDTH;
 	float windowHeight = DEFAULT_WINDOW_HEIGHT;
 	
-	float margin = 16.f;
-	float padding = 10.f;
-	float spacing = 10.f;
-
 	float moveHistorySize{};
 	float rowDistance{};
 

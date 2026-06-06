@@ -24,7 +24,6 @@ void UI::updateUI() {
 }
 
 void UI::handleResize(const unsigned int windowWidth, const unsigned int windowHeight) {
-    renderer.setInfo(windowWidth, windowHeight);
     recalibrateViews(windowWidth, windowHeight);
 }
 
@@ -93,7 +92,7 @@ void UI::resizeMainMenuLayout() {
     mainMenuLayout.settingsButton.size = buttonSize;
     mainMenuLayout.quitButton.size = buttonSize;
     
-    const sf::Vector2f centerOfWindow = { renderer.getWindowWidth() / 2.f, renderer.getWindowHeight() / 2.f };
+    const sf::Vector2f centerOfWindow = { windowSize.x / 2.f, windowSize.y / 2.f };
     mainMenuLayout.playButton.position = centerOfWindow;
     mainMenuLayout.settingsButton.position = { centerOfWindow.x, centerOfWindow.y + buttonSize.y * 1.5f };
     mainMenuLayout.quitButton.position = { centerOfWindow.x, centerOfWindow.y + buttonSize.y * 3.f };
