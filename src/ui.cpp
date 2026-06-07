@@ -223,6 +223,17 @@ void UI::setBoardView() {
     window.setView(boardView);
 }
 
+const sf::View& UI::getUIView() {
+    return uiView;
+}
+
+const sf::View& UI::getHistoryView() {
+    return historyView;
+}
+
+const sf::View& UI::getBoardView() {
+    return boardView;
+}
 
 const Button& UI::getResignationButton() {
     return resignationButton;

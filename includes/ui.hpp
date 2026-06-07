@@ -55,6 +55,10 @@ public:
 	void setHistoryView();
 	void setBoardView();
 
+	const sf::View& getUIView();	
+	const sf::View& getHistoryView();
+	const sf::View& getBoardView();
+
 	const Button& getResignationButton();
 
 	const PromoMenuLayout& getPromoMenuLayout();
