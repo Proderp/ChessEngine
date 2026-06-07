@@ -22,7 +22,7 @@ App::App() :
         window.setIcon(windowIcon);
     }
 
-    handleResize(windowSize);
+    handleResize();
 }
 
 void App::run() {
@@ -104,7 +104,7 @@ void App::handleEvents() {
             window.close();
 
         if (const auto* resizeEvent = event->getIf<sf::Event::Resized>()) {
-            handleResize(static_cast<sf::Vector2f>(resizeEvent->size));
+            handleResize();
         }
 
         if (const auto* mouseEvent = event->getIf<sf::Event::MouseButtonPressed>()) {
@@ -142,8 +142,9 @@ void App::handleEvents() {
     }
 }
 
-void App::handleResize(const sf::Vector2f newWindowSize) {
-    return;
+void App::handleResize() {
+    windowSize = static_cast<sf::Vector2f>(window.getSize());
+    ui.updateUI();
 }
 
 void App::handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent) {
@@ -533,7 +534,7 @@ void App::handleEscapeButton() {
     if (settings.fullScreen) {
         settings.fullScreen = !settings.fullScreen;
         window.create(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT }), "Chess", sf::Style::Default);
-        handleResize(static_cast<sf::Vector2f>(window.getSize()));
+        handleResize();
     }
 }
 
@@ -546,7 +547,7 @@ void App::fullScreenToggle() {
         window.create(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT }), "Chess", sf::Style::Default);
     }
 
-    handleResize(static_cast<sf::Vector2f>(window.getSize()));
+    handleResize();
 }
 
 void App::updateTimers(const float deltaTime) {

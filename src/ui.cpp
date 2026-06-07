@@ -6,7 +6,7 @@ UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
 {}
 
 void UI::updateUI() {
-    recalibrateViews(windowWidth, windowHeight);
+    recalibrateViews();
     
     resizeResignationButton();
 

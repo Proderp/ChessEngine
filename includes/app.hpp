@@ -34,7 +34,7 @@ private:
 
 	sf::Image windowIcon;
 
-	void handleResize(const sf::Vector2f newWindowSize);
+	void handleResize();
 	
 	void handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent);
 
