@@ -59,6 +59,8 @@ public:
 	const sf::View& getHistoryView();
 	const sf::View& getBoardView();
 
+	void moveHistoryView(const sf::Vector2f position);
+
 	const Button& getResignationButton();
 
 	const PromoMenuLayout& getPromoMenuLayout();

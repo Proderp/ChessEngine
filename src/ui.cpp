@@ -235,6 +235,10 @@ const sf::View& UI::getBoardView() {
     return boardView;
 }
 
+void UI::moveHistoryView(const sf::Vector2f position) {
+    historyView.move(position);
+}
+
 const Button& UI::getResignationButton() {
     return resignationButton;
 }
