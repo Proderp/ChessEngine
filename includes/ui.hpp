@@ -20,6 +20,7 @@ private:
 	SettingsLayout settingsLayout;
 	GameOverLayout gameOverLayout;
 
+	sf::FloatRect historyViewport;
     HistoryViewportMetrics historyViewportMetrics;
 	BoardMetrics boardMetrics;
 
@@ -46,6 +47,11 @@ private:
 
 	void resizeGameOverLayout();
 
+	void setBoardSizes();
+	void setOffsets();
+	void setBoardEdges();
+	void setHistoryViewport();
+
 public:
     UI(sf::RenderWindow& window, const sf::Vector2f& windowSize);
 
@@ -60,6 +66,7 @@ public:
 	const sf::View& getBoardView();
 
 	void moveHistoryView(const sf::Vector2f position);
+	void setHistoryViewCenter(const sf::Vector2f center);
 
 	const Button& getResignationButton();
 

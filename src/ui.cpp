@@ -211,6 +211,42 @@ void UI::resizeGameOverLayout() {
     resizeButtonBounds(gameOverLayout.mainMenuButton);
 }
 
+void UI::setBoardSizes() {
+	float smallerDimension = std::min(windowSize.x, windowSize.y);
+
+	boardMetrics.boardSize = smallerDimension * 0.8f;
+	boardMetrics.tileSize = boardMetrics.boardSize / 8.f;
+	boardMetrics.tileSize = boardMetrics.tileSize;
+
+	boardMetrics.circleSize = boardMetrics.tileSize / 8.f;
+}
+void UI::setOffsets() {
+	boardMetrics.offsetX = boardMetrics.tileSize * 1.5f;
+	boardMetrics.offsetY = ((windowSize.y - boardMetrics.boardSize) / 2.f) + (boardMetrics.tileSize / 2.f);
+}
+void UI::setBoardEdges() {
+	boardMetrics.boardRightEdge = boardMetrics.offsetX + ((FILES - 1) * boardMetrics.tileSize) + (boardMetrics.tileSize / 2.f);
+	boardMetrics.boardTopEdge = boardMetrics.offsetY - (boardMetrics.tileSize / 2.f);
+}
+void UI::setHistoryViewport() {
+	historyViewportMetrics.historyViewStartX = boardMetrics.offsetX + boardMetrics.boardSize;
+	historyViewportMetrics.historyViewStartY = boardMetrics.offsetY + boardMetrics.tileSize;
+
+	historyViewportMetrics.historyViewWidth = windowSize.x - historyViewportMetrics.historyViewStartX - boardMetrics.tileSize / 2.f;
+	historyViewportMetrics.historyViewHeight = windowSize.y - historyViewportMetrics.historyViewStartY * 2;
+
+	historyViewportMetrics.viewportXPercentage = historyViewportMetrics.historyViewStartX / windowSize.x;
+	historyViewportMetrics.viewportYPercentage = historyViewportMetrics.historyViewStartY / windowSize.y;
+
+	historyViewportMetrics.viewportWidthPercentage = historyViewportMetrics.historyViewWidth / windowSize.x;
+	historyViewportMetrics.viewportHeightPercentage = historyViewportMetrics.historyViewHeight / windowSize.y;
+
+	sf::Vector2f viewPosition{ historyViewportMetrics.viewportXPercentage, historyViewportMetrics.viewportYPercentage };
+	sf::Vector2f viewSize{ historyViewportMetrics.viewportWidthPercentage, historyViewportMetrics.viewportHeightPercentage };
+
+	historyViewport = sf::FloatRect(viewPosition, viewSize);
+}
+
 void UI::setUIView() {
     window.setView(uiView);
 }
@@ -237,6 +273,10 @@ const sf::View& UI::getBoardView() {
 
 void UI::moveHistoryView(const sf::Vector2f position) {
     historyView.move(position);
+}
+
+void UI::setHistoryViewCenter(const sf::Vector2f center) {
+    historyView.setCenter(center);
 }
 
 const Button& UI::getResignationButton() {

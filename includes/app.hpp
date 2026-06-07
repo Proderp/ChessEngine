@@ -48,7 +48,7 @@ private:
 	void startAnimation(const Move& lastMove);
 
 	void handleResignation(const sf::Vector2f uiPos);
-	std::optional<PieceType> promoMenuPick(const sf::Vector2f& uiPos, const std::optional<Side>& promotionSide) const;
+	std::optional<PieceType> promoMenuPick(const sf::Vector2f& uiPos, const std::optional<Side>& promotionSide);
 	void handlePromotion(const sf::Vector2f uiPos);
 
 	void handleScroll(const sf::Event::MouseWheelScrolled& scrollEvent);

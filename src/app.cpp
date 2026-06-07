@@ -111,7 +111,7 @@ void App::handleEvents() {
 
         if (const auto* mouseMovedEvent = event->getIf<sf::Event::MouseMoved>()) {
             if (currentState == GameState::Playing and isDragging) {
-                currentMousePosition = window.mapPixelToCoords(mouseMovedEvent->position, boardView);
+                currentMousePosition = window.mapPixelToCoords(mouseMovedEvent->position, ui.getBoardView());
             }
         }
 
@@ -172,9 +172,10 @@ void App::handleLeftClick(const sf::Event::MouseButtonPressed& mouseEvent) {
 void App::handleLeftClickMainMenu(const sf::Event::MouseButtonPressed& mouseEvent) {
     const sf::Vector2f mousePosition = static_cast<sf::Vector2f>(mouseEvent.position);
 
-    const bool userClickedPlayButton = ui.mainMenuLayout.playButton.bounds.contains(mousePosition);
-    const bool userClickedSettingsButton = ui.mainMenuLayout.settingsButton.bounds.contains(mousePosition);
-    const bool userClickedQuitButton = ui.mainMenuLayout.quitButton.bounds.contains(mousePosition);
+    const MainMenuLayout& mainMenu = ui.getMainMenuLayout();
+    const bool userClickedPlayButton = mainMenu.playButton.bounds.contains(mousePosition);
+    const bool userClickedSettingsButton = mainMenu.settingsButton.bounds.contains(mousePosition);
+    const bool userClickedQuitButton = mainMenu.quitButton.bounds.contains(mousePosition);
 
     if (userClickedPlayButton) {
         currentState = GameState::PrePlay;
@@ -190,7 +191,9 @@ void App::handleLeftClickMainMenu(const sf::Event::MouseButtonPressed& mouseEven
 void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent) {
     const sf::Vector2f mousePosition = static_cast<sf::Vector2f>(mouseEvent.position);
 
-    if (ui.prePlayLayout.startGameButton.bounds.contains(mousePosition)) {
+    const PrePlayLayout& prePlay = ui.getPrePlayLayout();
+
+    if (prePlay.startGameButton.bounds.contains(mousePosition)) {
         // starting: 
         // KNBvK: 8/8/8/4k3/8/8/8/5KBN w - - 0 1
         game = Game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", playerChoices);
@@ -200,12 +203,12 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
         return;
     }
 
-    if (ui.prePlayLayout.backButton.bounds.contains(mousePosition)) {
+    if (prePlay.backButton.bounds.contains(mousePosition)) {
         currentState = GameState::MainMenu;
     }
 
-    for (int buttonIndex = 0; buttonIndex < ui.prePlayLayout.sideButtons.size(); buttonIndex++) {
-        const sf::FloatRect& bounds = ui.prePlayLayout.sideButtons[buttonIndex]->bounds;
+    for (int buttonIndex = 0; buttonIndex < prePlay.sideButtons.size(); buttonIndex++) {
+        const sf::FloatRect& bounds = prePlay.sideButtons[buttonIndex]->bounds;
         if (bounds.contains(mousePosition)) {
             switch (buttonIndex) {
             case 0:
@@ -222,8 +225,8 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
         }
     }
 
-    for (int buttonIndex = 0; buttonIndex < ui.prePlayLayout.opponentButtons.size(); buttonIndex++) {
-        const sf::FloatRect& bounds = ui.prePlayLayout.opponentButtons[buttonIndex]->bounds;
+    for (int buttonIndex = 0; buttonIndex < prePlay.opponentButtons.size(); buttonIndex++) {
+        const sf::FloatRect& bounds = prePlay.opponentButtons[buttonIndex]->bounds;
         if (bounds.contains(mousePosition)) {
             switch (buttonIndex) {
             case 0:
@@ -237,8 +240,8 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
         }
     }
 
-    for (int buttonIndex = 0; buttonIndex < ui.prePlayLayout.timeControlButtons.size(); buttonIndex++) {
-        const sf::FloatRect& bounds = ui.prePlayLayout.timeControlButtons[buttonIndex]->bounds;
+    for (int buttonIndex = 0; buttonIndex < prePlay.timeControlButtons.size(); buttonIndex++) {
+        const sf::FloatRect& bounds = prePlay.timeControlButtons[buttonIndex]->bounds;
         if (bounds.contains(mousePosition)) {
             switch (buttonIndex) {
             case 0:
@@ -255,8 +258,8 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
         }
     }
 
-    for (int buttonIndex = 0; buttonIndex < ui.prePlayLayout.incrementButtons.size(); buttonIndex++) {
-        const sf::FloatRect& bounds = ui.prePlayLayout.incrementButtons[buttonIndex]->bounds;
+    for (int buttonIndex = 0; buttonIndex < prePlay.incrementButtons.size(); buttonIndex++) {
+        const sf::FloatRect& bounds = prePlay.incrementButtons[buttonIndex]->bounds;
         if (bounds.contains(mousePosition)) {
             playerChoices.timeIncrement = timeIncrementChoices.at(buttonIndex);
             return;
@@ -266,23 +269,24 @@ void App::handleLeftClickPrePlay(const sf::Event::MouseButtonPressed& mouseEvent
 
 void App::handleLeftClickSettings(const sf::Event::MouseButtonPressed& mouseEvent) {
     const sf::Vector2f mousePosition = static_cast<sf::Vector2f>(mouseEvent.position);
+    const SettingsLayout& settingsLayout = ui.getSettingsLayout();
 
-    if (ui.settingsLayout.backButton.bounds.contains(mousePosition)) {
+    if (settingsLayout.backButton.bounds.contains(mousePosition)) {
         currentState = GameState::MainMenu;
         return;
     }
 
-    if (ui.settingsLayout.toggleButtons[0]->bounds.contains(mousePosition)) {
+    if (settingsLayout.toggleButtons[0]->bounds.contains(mousePosition)) {
         fullScreenToggle();
         return;
     }
 
-    if (ui.settingsLayout.toggleButtons[1]->bounds.contains(mousePosition)) {
+    if (settingsLayout.toggleButtons[1]->bounds.contains(mousePosition)) {
         settings.showLegalMoves = !settings.showLegalMoves;
         return;
     }
 
-    if (ui.settingsLayout.toggleButtons[2]->bounds.contains(mousePosition)) {
+    if (settingsLayout.toggleButtons[2]->bounds.contains(mousePosition)) {
         settings.autoPromoteToQueen = !settings.autoPromoteToQueen;
         return;
     }
@@ -294,14 +298,14 @@ void App::handleLeftClickPlaying(const sf::Event::MouseButtonPressed& mouseEvent
     }
 
     sf::Vector2i mousePosition = mouseEvent.position;
-    const sf::Vector2f uiPos = window.mapPixelToCoords(mousePosition, uiView);
+    const sf::Vector2f uiPos = window.mapPixelToCoords(mousePosition, ui.getUIView());
 
     if (game.getIsConfirmingResignation()) {
         handleResignation(uiPos);
         return;
     }
 
-    const bool userClickedResignationButton = ui.resignationButton.bounds.contains(uiPos);
+    const bool userClickedResignationButton = ui.getResignationButton().bounds.contains(uiPos);
 
     if (userClickedResignationButton) {
         game.resetSelectedSquare();
@@ -317,13 +321,14 @@ void App::handleLeftClickPlaying(const sf::Event::MouseButtonPressed& mouseEvent
 
 void App::handleLeftClickGameOver(const sf::Event::MouseButtonPressed& mouseEvent) {
     const sf::Vector2f mousePosition = static_cast<sf::Vector2f>(mouseEvent.position);
+    const GameOverLayout& gameOverLayout = ui.getGameOverLayout();
 
-    if (ui.gameOverLayout.mainMenuButton.bounds.contains(mousePosition)) {
+    if (gameOverLayout.mainMenuButton.bounds.contains(mousePosition)) {
         currentState = GameState::MainMenu;
         return;
     } 
 
-    if (ui.gameOverLayout.playAgainButton.bounds.contains(mousePosition)) {
+    if (gameOverLayout.playAgainButton.bounds.contains(mousePosition)) {
         currentState = GameState::PrePlay;
         return;
     }
@@ -334,8 +339,9 @@ void App::handleClickOnBoard(const sf::Vector2i& mousePosition) {
         return;
     }
 
-    const sf::Vector2f worldPos = window.mapPixelToCoords(mousePosition, boardView);
+    const sf::Vector2f worldPos = window.mapPixelToCoords(mousePosition, ui.getBoardView());
 
+    const BoardMetrics& boardMetrics = ui.getBoardMetrics();
     int clickedRank = static_cast<int>(floor((worldPos.y - boardMetrics.offsetY + boardMetrics.tileSize / 2.f) / boardMetrics.tileSize));
     int clickedFile = static_cast<int>(floor((worldPos.x - boardMetrics.offsetX + boardMetrics.tileSize / 2.f) / boardMetrics.tileSize));
 
@@ -371,6 +377,7 @@ void App::startAnimation(const Move& lastMove) {
     int drawnToRank = (renderer.playerSide == Side::Black) ? 7 - lastMove.toRank : lastMove.toRank;
     int drawnToFile = (renderer.playerSide == Side::Black) ? 7 - lastMove.toFile : lastMove.toFile;
 
+    const BoardMetrics& boardMetrics = ui.getBoardMetrics();
     currentAnimation.endPixel = {
         boardMetrics.offsetX + (drawnToFile * boardMetrics.tileSize),
         boardMetrics.offsetY + (drawnToRank * boardMetrics.tileSize)
@@ -451,12 +458,13 @@ void App::handlePromotion(const sf::Vector2f uiPos) {
         game.handlePendingPromo(chosenPiece.value());
     }
 }
-std::optional<PieceType> App::promoMenuPick(const sf::Vector2f& uiPos, const std::optional<Side>& promotionSide) const {
+std::optional<PieceType> App::promoMenuPick(const sf::Vector2f& uiPos, const std::optional<Side>& promotionSide) {
     if (!promotionSide.has_value())
         return std::nullopt;
 
-    for (std::size_t i = 0; i < ui.promoMenuLayout.slotRects.size(); i++) {
-        if (ui.promoMenuLayout.slotRects[i].contains(uiPos))
+    const PromoMenuLayout& promoMenu = ui.getPromoMenuLayout();
+    for (std::size_t i = 0; i < promoMenu.slotRects.size(); i++) {
+        if (promoMenu.slotRects[i].contains(uiPos))
             return promotionPieceTypes.at(i);
     }
 
@@ -465,30 +473,30 @@ std::optional<PieceType> App::promoMenuPick(const sf::Vector2f& uiPos, const std
 
 void App::handleScroll(const sf::Event::MouseWheelScrolled& scrollEvent) {
     if (scrollEvent.wheel == sf::Mouse::Wheel::Vertical) {
-        const float scrollSpeed = boardMetrics.tileSize / 2.f;
+        const float scrollSpeed = ui.getBoardMetrics().tileSize / 2.f;
         const float scrollDirection = scrollEvent.delta * -1;
 
-        historyView.move({ 0.f, scrollSpeed * scrollDirection });
+        ui.moveHistoryView({ 0.f, scrollSpeed * scrollDirection });
 
         limitScroll();
     }
 }
 void App::limitScroll() {
-    const float halfViewHeight = historyView.getSize().y / 2.f;
+    const float halfViewHeight = ui.getHistoryView().getSize().y / 2.f;
 
     const float minCenterY = halfViewHeight;
     const float maxCenterY = std::max(minCenterY, renderer.getMoveHistorySize() - halfViewHeight + renderer.getMargin());
 
-    sf::Vector2f center = historyView.getCenter();
+    sf::Vector2f center = ui.getHistoryView().getCenter();
 
     if (center.y < minCenterY) center.y = minCenterY;
     if (center.y > maxCenterY) center.y = maxCenterY;
 
-    historyView.setCenter(center);
+    ui.setHistoryViewCenter(center);
 }
 void App::scrollToBottom() {
     recalculateMoveHistorySize();
-    historyView.move({ 0.f, 99999.f });
+    ui.moveHistoryView({ 0.f, 99999.f });
     limitScroll();
 }
 
@@ -498,8 +506,9 @@ void App::handleMouseRelease(const sf::Event::MouseButtonReleased& mouseReleased
 
     isDragging = false;
 
-    const sf::Vector2f worldPos = window.mapPixelToCoords(mouseReleased.position, boardView);
-
+    const sf::Vector2f worldPos = window.mapPixelToCoords(mouseReleased.position, ui.getBoardView());
+    
+    const BoardMetrics& boardMetrics = ui.getBoardMetrics();
     int releaseRank = static_cast<int>(floor((worldPos.y - boardMetrics.offsetY + boardMetrics.tileSize / 2.f) / boardMetrics.tileSize));
     int releaseFile = static_cast<int>(floor((worldPos.x - boardMetrics.offsetX + boardMetrics.tileSize / 2.f) / boardMetrics.tileSize));
 
@@ -571,26 +580,26 @@ void App::render() {
 }
 
 void App::renderMainMenu() {
-    window.setView(uiView);
-    renderer.drawMainMenu(ui.mainMenuLayout);
+    ui.setUIView();
+    renderer.drawMainMenu(ui.getMainMenuLayout());
 }
 
 void App::renderPrePlay() {
-    window.setView(uiView);
-    renderer.drawPrePlayPage(ui.prePlayLayout, playerChoices);
+    ui.setUIView();
+    renderer.drawPrePlayPage(ui.getPrePlayLayout(), playerChoices);
 }
 
 void App::renderSettings() {
-    window.setView(uiView);
-    renderer.drawSettingsPage(ui.settingsLayout, settings);
+    ui.setUIView();
+    renderer.drawSettingsPage(ui.getSettingsLayout(), settings);
 }
 
 void App::renderPlayingState() {
     renderBoardView();
 
     if (game.getIsConfirmingResignation()) {
-        window.setView(uiView);
-        renderer.drawResignationConfirmation(ui.resignationConfirmationLayout);
+        ui.setUIView();
+        renderer.drawResignationConfirmation(ui.getResignationConfirmationLayout());
     }
     else {
         renderHistoryView();
@@ -599,7 +608,7 @@ void App::renderPlayingState() {
     renderUIView();
 }
 void App::renderBoardView() {
-    window.setView(boardView);
+    ui.setBoardView();
     renderer.drawBoard(game.getBoard(), game.getSelectedRank(), game.getSelectedFile(), game.getLastMove());
 
     renderer.drawPieces(
@@ -622,14 +631,14 @@ void App::renderHistoryView() {
     sf::RectangleShape testRect({ historyViewportMetrics.historyViewWidth, 5'000.f });
     testRect.setFillColor(sf::Color(100, 149, 237, 100));
 
-    window.setView(historyView);
+    ui.setHistoryView();
     window.draw(testRect);
     renderer.drawMoveHistory(game.getMoveHistory());
 }
 void App::renderUIView() {
-    window.setView(uiView);
+    ui.setUIView();
     renderer.drawTimers(game.getWhiteTime(), game.getBlackTime());
-    renderer.drawResignationButton(ui.resignationButton);
+    renderer.drawResignationButton(ui.getResignationButton());
     renderer.drawRanksAndFiles(game.getCurrentTurn());
     renderer.drawPromoMenu(game.getPromoMenuSide());
     renderer.drawGraveyards(game.getBoardMaterial());
@@ -638,6 +647,6 @@ void App::renderUIView() {
 void App::renderGameOverState() {
     renderPlayingState();
 
-    window.setView(uiView);
-    renderer.drawGameOverLayout(ui.gameOverLayout, game.getGameOverType(), game.getWinner());
+    ui.setUIView();
+    renderer.drawGameOverLayout(ui.getGameOverLayout(), game.getGameOverType(), game.getWinner());
 }

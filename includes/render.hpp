@@ -1,9 +1,11 @@
 #pragma once
 #include "includes.hpp"
 #include "game.hpp"
+#include "ui-elements.hpp"
 
 class Render {
 private:
+	const BoardMetrics& boardMetrics;
 	const ColourContainer colours;
 		
 	sf::Font font;
@@ -97,10 +99,6 @@ private:
 	void loadFont();
 
 	void setWindowInfo(const unsigned int windowWidth, const unsigned int windowHeight);
-	void setBoardSizes();
-	void setOffsets();
-	void setBoardEdges();
-	void setHistoryViewport();
 	void setTimerText();
 	void setTimerBackgrounds();
 	void setMoveCircle();
@@ -118,26 +116,13 @@ private:
 
 	void setTextOrigin(sf::Text& text);
 
-	float windowWidth = DEFAULT_WINDOW_WIDTH;
-	float windowHeight = DEFAULT_WINDOW_HEIGHT;
-	
 	float moveHistorySize{};
 	float rowDistance{};
 
-	sf::FloatRect historyViewport;
 public:
 	Side playerSide;
 
-	const BoardMetrics& getBoardMetrics() const;
-	const HistoryViewportMetrics& getHistoryViewportMetrics() const;
-
 	const sf::FloatRect& getHistoryViewport() const;
-
-	float getWindowWidth() const;
-	float getWindowHeight() const;
-	float getMargin() const;
-	float getPadding() const;
-	float getSpacing() const;
 
 	float getMoveHistorySize() const;
 	void setMoveHistorySize(const float newSize);
@@ -145,7 +130,7 @@ public:
 	float getRowDistance() const;
 	void setRowDistance(const float newDistance);
 
-	Render(sf::RenderWindow& window, const Side playerSide);
+	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, const Side playerSide);
 
 	void setInfo(const unsigned int windowWidth, const unsigned int windowHeight);
 

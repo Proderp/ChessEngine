@@ -1,6 +1,7 @@
 #include "render.hpp"
 
-Render::Render(sf::RenderWindow& window, const Side playerSide) : 
+Render::Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, const Side playerSide) : 
+	boardMetrics(boardMetrics),
 	window(window), 
 	playerSide(playerSide)
 {
@@ -93,41 +94,7 @@ void Render::setWindowInfo(const unsigned int windowWidth, const unsigned int wi
 	this->windowWidth = static_cast<float>(windowWidth);
 	this->windowHeight = static_cast<float>(windowHeight);
 }
-void Render::setBoardSizes() {
-	float smallerDimension = std::min(windowWidth, windowHeight);
 
-	boardMetrics.boardSize = smallerDimension * 0.8f;
-	boardMetrics.tileSize = boardMetrics.boardSize / 8.f;
-	boardMetrics.tileSize = boardMetrics.tileSize;
-
-	boardMetrics.circleSize = boardMetrics.tileSize / 8.f;
-}
-void Render::setOffsets() {
-	boardMetrics.offsetX = boardMetrics.tileSize * 1.5f;
-	boardMetrics.offsetY = ((windowHeight - boardMetrics.boardSize) / 2.f) + (boardMetrics.tileSize / 2.f);
-}
-void Render::setBoardEdges() {
-	boardMetrics.boardRightEdge = boardMetrics.offsetX + ((FILES - 1) * boardMetrics.tileSize) + (boardMetrics.tileSize / 2.f);
-	boardMetrics.boardTopEdge = boardMetrics.offsetY - (boardMetrics.tileSize / 2.f);
-}
-void Render::setHistoryViewport() {
-	historyViewportMetrics.historyViewStartX = boardMetrics.offsetX + boardMetrics.boardSize;
-	historyViewportMetrics.historyViewStartY = boardMetrics.offsetY + boardMetrics.tileSize;
-
-	historyViewportMetrics.historyViewWidth = windowWidth - historyViewportMetrics.historyViewStartX - boardMetrics.tileSize / 2.f;
-	historyViewportMetrics.historyViewHeight = windowHeight - historyViewportMetrics.historyViewStartY * 2;
-
-	historyViewportMetrics.viewportXPercentage = historyViewportMetrics.historyViewStartX / windowWidth;
-	historyViewportMetrics.viewportYPercentage = historyViewportMetrics.historyViewStartY / windowHeight;
-
-	historyViewportMetrics.viewportWidthPercentage = historyViewportMetrics.historyViewWidth / windowWidth;
-	historyViewportMetrics.viewportHeightPercentage = historyViewportMetrics.historyViewHeight / windowHeight;
-
-	sf::Vector2f viewPosition{ historyViewportMetrics.viewportXPercentage, historyViewportMetrics.viewportYPercentage };
-	sf::Vector2f viewSize{ historyViewportMetrics.viewportWidthPercentage, historyViewportMetrics.viewportHeightPercentage };
-
-	historyViewport = sf::FloatRect(viewPosition, viewSize);
-}
 void Render::setTimerText() {
 	whiteTimerText.setFillColor(sf::Color::Black);
 	blackTimerText.setFillColor(sf::Color::Black);
@@ -934,14 +901,6 @@ void Render::drawGameOverLayout(const GameOverLayout& gameOverLayout, const std:
 	window.draw(gameOverText);
 }
 
-const BoardMetrics& Render::getBoardMetrics() const {
-	return boardMetrics;
-}
-
-const HistoryViewportMetrics& Render::getHistoryViewportMetrics() const {
-	return historyViewportMetrics;
-}
-
 const sf::FloatRect& Render::getHistoryViewport() const {
 	return historyViewport;
 }
@@ -952,18 +911,6 @@ float Render::getWindowWidth() const {
 
 float Render::getWindowHeight() const {
 	return windowHeight;
-}
-
-float Render::getMargin() const {
-	return margin;
-}
-
-float Render::getPadding() const {
-	return padding;
-}
-
-float Render::getSpacing() const {
-	return spacing;
 }
 
 float Render::getMoveHistorySize() const {
