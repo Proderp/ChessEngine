@@ -211,6 +211,19 @@ void UI::resizeGameOverLayout() {
     resizeButtonBounds(gameOverLayout.mainMenuButton);
 }
 
+void UI::setUIView() {
+    window.setView(uiView);
+}
+
+void UI::setHistoryView() {
+    window.setView(historyView);
+}
+
+void UI::setBoardView() {
+    window.setView(boardView);
+}
+
+
 const Button& UI::getResignationButton() {
     return resignationButton;
 }

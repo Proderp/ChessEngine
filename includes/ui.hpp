@@ -51,6 +51,10 @@ public:
 
     void updateUI();
 
+	void setUIView();
+	void setHistoryView();
+	void setBoardView();
+
 	const Button& getResignationButton();
 
 	const PromoMenuLayout& getPromoMenuLayout();
