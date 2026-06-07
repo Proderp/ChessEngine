@@ -4,11 +4,13 @@ UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
     window(window),
     windowSize(windowSize)
 {
+    updateUI();
+
     boardView = window.getDefaultView();
     uiView = window.getDefaultView();
     historyView = window.getDefaultView();
     
-    historyView.setViewport(renderer.getHistoryViewport());
+    historyView.setViewport(historyViewport);
     historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
     historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
 }
@@ -31,20 +33,25 @@ void UI::updateUI() {
     resizeSettingsLayout();
 
     resizeGameOverLayout();
+
+    setBoardSizes();
+	setOffsets();
+	setBoardEdges();
+	setHistoryViewport();
 }
 
-void UI::recalibrateViews(const sf::Vector2f newWindowSize) {
-    const sf::Vector2f centerOfWindow = { newWindowSize.x / 2.f, newWindowSize.y / 2.f };
+void UI::recalibrateViews() {
+    const sf::Vector2f centerOfWindow = {windowSize.x / 2.f, windowSize.y / 2.f};
 
     boardView.setCenter(centerOfWindow);
-    boardView.setSize(newWindowSize);
+    boardView.setSize(windowSize);
 
     uiView.setCenter(centerOfWindow);
-    uiView.setSize(newWindowSize);
+    uiView.setSize(windowSize);
 
     historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
     historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
-    historyView.setViewport(renderer.getHistoryViewport());
+    historyView.setViewport(historyViewport);
 }
 
 void UI::resizeResignationButton() {
@@ -76,19 +83,20 @@ void UI::resizeLayoutButtonBounds() {
 }
 
 void UI::resizePromoLayout() {
-    promoMenuLayout.panelPosition = { boardMetrics.boardRightEdge + margin, boardMetrics.boardTopEdge};
-    promoMenuLayout.panelSize = { boardMetrics.tileSize + (padding * 2.f), (4.f * boardMetrics.tileSize) + (padding * 2.f) + (3.f * spacing) };
+    promoMenuLayout.panelPosition = { boardMetrics.boardRightEdge + uiConsts.margin, boardMetrics.boardTopEdge};
+    promoMenuLayout.panelSize = { boardMetrics.tileSize + (uiConsts.padding * 2.f), (4.f * boardMetrics.tileSize) + (uiConsts.padding * 2.f) + (3.f * uiConsts.spacing) };
 
     for (std::size_t i = 0; i < promoMenuLayout.slotRects.size(); i++) {
         sf::FloatRect rect{};
-        rect.position = { promoMenuLayout.panelPosition.x + padding, promoMenuLayout.panelPosition.y + padding + (static_cast<float>(i) * (boardMetrics.tileSize + spacing))};
+        rect.position = { promoMenuLayout.panelPosition.x + uiConsts.padding, promoMenuLayout.panelPosition.y + uiConsts.padding + (static_cast<float>(i) * (boardMetrics.tileSize + uiConsts.spacing))};
         rect.size = { boardMetrics.tileSize, boardMetrics.tileSize };
         promoMenuLayout.slotRects[i] = rect;
     }
 }
+
 void UI::recalculateMoveHistorySize() {
     renderer.setRowDistance(boardMetrics.tileSize / 2.f);
-    renderer.setMoveHistorySize(game.getMoveHistory().size() * renderer.getRowDistance() + margin);
+    renderer.setMoveHistorySize(game.getMoveHistory().size() * renderer.getRowDistance() + uiConsts.margin);
 }
 
 void UI::resizeMainMenuLayout() {
@@ -163,7 +171,7 @@ void UI::resizePrePlayLayout() {
 
     const sf::Vector2f backButtonSize = { boardMetrics.tileSize * 1.5f, boardMetrics.tileSize * 0.75f };
     prePlayLayout.backButton.size = backButtonSize;
-    prePlayLayout.backButton.position = { margin + backButtonSize.x / 2.f, margin + backButtonSize.y / 2.f };
+    prePlayLayout.backButton.position = { uiConsts.margin + backButtonSize.x / 2.f, uiConsts.margin + backButtonSize.y / 2.f };
     resizeButtonBounds(prePlayLayout.backButton);
 }
 
@@ -182,7 +190,7 @@ void UI::resizeSettingsLayout() {
 
     const sf::Vector2f backButtonSize = { boardMetrics.tileSize * 1.5f, boardMetrics.tileSize * 0.75f };
     settingsLayout.backButton.size = backButtonSize;
-    settingsLayout.backButton.position = { margin + backButtonSize.x / 2.f, margin + backButtonSize.y / 2.f };
+    settingsLayout.backButton.position = { uiConsts.margin + backButtonSize.x / 2.f, uiConsts.margin + backButtonSize.y / 2.f };
     resizeButtonBounds(settingsLayout.backButton);
 }
 
@@ -245,6 +253,10 @@ void UI::setHistoryViewport() {
 	sf::Vector2f viewSize{ historyViewportMetrics.viewportWidthPercentage, historyViewportMetrics.viewportHeightPercentage };
 
 	historyViewport = sf::FloatRect(viewPosition, viewSize);
+}
+
+const float UI::getMargin() const {
+    return uiConsts.margin;
 }
 
 void UI::setUIView() {

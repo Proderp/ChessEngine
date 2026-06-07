@@ -1,13 +1,14 @@
 #include "render.hpp"
 
-Render::Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, const Side playerSide) : 
+Render::Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f windowSize, const Side playerSide) : 
 	boardMetrics(boardMetrics),
-	window(window), 
+	window(window),
+	windowSize(windowSize),
 	playerSide(playerSide)
 {
 	loadTextures();
 	loadFont();
-	setInfo(window.getSize().x, window.getSize().y);
+	setInfo();
 }
 
 void Render::loadTextures() {
@@ -68,12 +69,7 @@ void Render::loadFont() {
 	}
 }
 
-void Render::setInfo(const unsigned int windowWidth, const unsigned int windowHeight) {
-	setWindowInfo(windowWidth, windowHeight);
-	setBoardSizes();
-	setOffsets();
-	setBoardEdges();
-	setHistoryViewport();
+void Render::setInfo() {
 	setTimerText();
 	setTimerBackgrounds();
 	setMoveCircle();
@@ -90,11 +86,6 @@ void Render::setInfo(const unsigned int windowWidth, const unsigned int windowHe
 	boardSquareRect.setSize({ boardMetrics.tileSize, boardMetrics.tileSize });
 }
 
-void Render::setWindowInfo(const unsigned int windowWidth, const unsigned int windowHeight) {
-	this->windowWidth = static_cast<float>(windowWidth);
-	this->windowHeight = static_cast<float>(windowHeight);
-}
-
 void Render::setTimerText() {
 	whiteTimerText.setFillColor(sf::Color::Black);
 	blackTimerText.setFillColor(sf::Color::Black);
@@ -103,6 +94,7 @@ void Render::setTimerText() {
 	whiteTimerText.setCharacterSize(timerFontSize);
 	blackTimerText.setCharacterSize(timerFontSize);
 }
+
 void Render::setTimerBackgrounds() {
 	const sf::Vector2f backgroundSize = { boardMetrics.tileSize * 2.5f, boardMetrics.tileSize };
 
@@ -114,24 +106,28 @@ void Render::setTimerBackgrounds() {
 	blackTimerBackground.setFillColor(colours.darkColour);
 	blackTimerBackground.setOrigin({ 0.f, backgroundSize.y / 2.f });
 }
+
 void Render::setMoveCircle() {
 	moveCircle.setRadius(boardMetrics.circleSize);
 	moveCircle.setOrigin({ boardMetrics.circleSize, boardMetrics.circleSize });
 	moveCircle.setFillColor(colours.legalCirclesColour);
 }
+
 void Render::setMoveHistoryText() {
 	const unsigned int moveHistoryCharSize = static_cast<unsigned int>(boardMetrics.tileSize / 2.f);
 	stamp.setCharacterSize(moveHistoryCharSize);
 }
+
 void Render::setPromoMenuBackground() {
-	panelWidth = boardMetrics.tileSize + (padding * 2.f);
-	panelHeight = (static_cast<float>(promotionPieceTypes.size()) * boardMetrics.tileSize) + (padding * 2.f) + ((static_cast<float>(promotionPieceTypes.size()) - 1.f) * spacing);
+	panelWidth = boardMetrics.tileSize + (uiConsts.padding * 2.f);
+	panelHeight = (static_cast<float>(promotionPieceTypes.size()) * boardMetrics.tileSize) + (uiConsts.padding * 2.f) + ((static_cast<float>(promotionPieceTypes.size()) - 1.f) * uiConsts.spacing);
 
 	promoMenuBackground.setSize({ panelWidth, panelHeight });
 	promoMenuBackground.setFillColor(colours.promoWindowBGColour);
 	promoMenuBackground.setOutlineColor(colours.promoWindowOutlineColour);
 	promoMenuBackground.setOutlineThickness(2.f);
 }
+
 void Render::setPromoMenuSlots() {
 	slotRect.setSize({ boardMetrics.tileSize, boardMetrics.tileSize });
 	slotRect.setFillColor(colours.transparentWhite);
@@ -139,6 +135,7 @@ void Render::setPromoMenuSlots() {
 	slotRect.setOutlineColor(colours.slotOutlineColour);
 	slotRect.setOutlineThickness(1.f);
 }
+
 void Render::setRankAndFiles() {
 	rankAndFileCharSize = static_cast<unsigned int>(boardMetrics.tileSize) / 3;
 
@@ -153,6 +150,7 @@ void Render::setRankAndFiles() {
 		formatText(fileText[i], boardMetrics.offsetX + (i * boardMetrics.tileSize), boardMetrics.offsetY + boardMetrics.boardSize);
 	}
 }
+
 void Render::setResignationConfirmationText() {
 	areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
 	buttonCharSize = areYouSureCharSize / 2;
@@ -161,13 +159,14 @@ void Render::setResignationConfirmationText() {
 	cancelText.setCharacterSize(buttonCharSize);
 	confirmText.setCharacterSize(buttonCharSize);
 }
+
 void Render::setMainMenuText() {
 	titleCharSize = static_cast<unsigned int>(boardMetrics.tileSize * 2.5f);
 	mainMenuTitleText.setCharacterSize(titleCharSize);
 
 	setTextOrigin(mainMenuTitleText);
 
-	const sf::Vector2f titlePosition = { windowWidth / 2.f, windowHeight / 4.f };
+	const sf::Vector2f titlePosition = { windowSize.x / 2.f, windowSize.y / 4.f };
 	mainMenuTitleText.setPosition(titlePosition);
 
 	menuButtonCharSize = static_cast<unsigned int>(boardMetrics.tileSize / 2.f);
@@ -182,16 +181,16 @@ void Render::setMainMenuText() {
 }
 
 void Render::setPrePlayPage() {
-	prePlayTextXPosition = windowWidth * 0.33f;
+	prePlayTextXPosition = windowSize.x * 0.33f;
 	prePlayAndSettingsCharSize = static_cast<unsigned int>(boardMetrics.tileSize / 2.f);
 }
 
 void Render::setSettingsPage() {
-	settingsTextXPosition = windowWidth * 0.45f;
+	settingsTextXPosition = windowSize.x * 0.45f;
 }
 
 void Render::setGameOverLayout() {
-	tintedGlassRect.setSize({ windowWidth, windowHeight });
+	tintedGlassRect.setSize({ windowSize.x, windowSize.y });
 	tintedGlassRect.setFillColor(sf::Color(0, 0, 0, 150));
 }
 
@@ -299,7 +298,7 @@ void Render::drawPromoMenu(const std::optional<Side>& promoSide) {
 
 	const int sideIndex = static_cast<int>((promoSide.value() == Side::White) ? Side::White : Side::Black);
 
-	promoMenuBackground.setPosition({ boardMetrics.boardRightEdge + margin, boardMetrics.boardTopEdge });
+	promoMenuBackground.setPosition({ boardMetrics.boardRightEdge + uiConsts.margin, boardMetrics.boardTopEdge });
 	window.draw(promoMenuBackground);
 
 	const float panelX = promoMenuBackground.getPosition().x;
@@ -307,7 +306,7 @@ void Render::drawPromoMenu(const std::optional<Side>& promoSide) {
 	const float centerX = panelX + (panelWidth / 2.f);
 
 	for (std::size_t i{ 0 }; i < promotionPieceTypes.size(); ++i) {
-		const float centerY = panelY + padding + (boardMetrics.tileSize / 2.f) + (static_cast<float>(i) * (boardMetrics.tileSize + spacing));
+		const float centerY = panelY + uiConsts.padding + (boardMetrics.tileSize / 2.f) + (static_cast<float>(i) * (boardMetrics.tileSize + uiConsts.spacing));
 
 		slotRect.setPosition({ centerX, centerY });
 		window.draw(slotRect);
@@ -523,15 +522,15 @@ void Render::updateGraveyardCounts(const std::vector<Piece>& whiteGraveyard, con
 	updateSingleGraveyardCount(blackGraveyard, blackGraveyardCount);
 }
 
-void Render::drawMoveHistory(const std::vector<Turn>& turns) {
-	const float startingXPosition = margin;
+void Render::drawMoveHistory(const std::vector<Turn>& turns, const HistoryViewportMetrics& historyViewportMetrics) {
+	const float startingXPosition = uiConsts.margin;
 	float currentXPosition = startingXPosition;
-	float currentYPosition = margin;
+	float currentYPosition = uiConsts.margin;
 
 	const float whiteColumn = historyViewportMetrics.historyViewWidth * 0.3f;
 	const float blackColumn = whiteColumn * 2.f;
 
-	moveHistorySize = turns.size() * rowDistance + margin;
+	moveHistorySize = turns.size() * rowDistance + uiConsts.margin;
 
 	auto drawText = [&](const std::string& text, const float xPosition) {
 		stamp.setString(text);
@@ -562,7 +561,7 @@ void Render::drawResignationButton(const Button& resignationButton) {
 	window.draw(buttonShape);
 }
 
-void Render::drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout) {
+void Render::drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout, const HistoryViewportMetrics& historyViewportMetrics) {
 	auto formatRect = [&](const sf::Vector2f size, const sf::Color backgroundColour, const sf::Vector2f position) {
 		sf::RectangleShape rect{ size };
 		rect.setFillColor(backgroundColour);
@@ -621,7 +620,7 @@ void Render::drawPrePlayPage(const PrePlayLayout& prePlayLayout, const PlayerCho
 	const sf::Vector2f buttonSize = prePlayLayout.sideButtons[0]->size;
 	sf::Sprite iconSprite{ sideChoiceTextures[0] };
 
-	float currentXPosition = windowWidth * 0.4f;
+	float currentXPosition = windowSize.x * 0.4f;
 	float currentYPosition = boardMetrics.tileSize / 2.f;
 
 	auto drawPrePlayText = [&](const std::string string) {
@@ -671,7 +670,7 @@ void Render::drawPrePlayPage(const PrePlayLayout& prePlayLayout, const PlayerCho
 	};
 
 	auto changePositions = [&]() {
-		currentXPosition = windowWidth * 0.4f;
+		currentXPosition = windowSize.x * 0.4f;
 		currentYPosition += buttonSize.y * 1.5f;
 	};
 
@@ -899,18 +898,6 @@ void Render::drawGameOverLayout(const GameOverLayout& gameOverLayout, const std:
 	setTextOrigin(gameOverText);
 	gameOverText.setPosition({ gameOverLayout.position.x, gameOverLayout.position.y - (gameOverLayout.size.y * 0.08f) });
 	window.draw(gameOverText);
-}
-
-const sf::FloatRect& Render::getHistoryViewport() const {
-	return historyViewport;
-}
-
-float Render::getWindowWidth() const {
-	return windowWidth;
-}
-
-float Render::getWindowHeight() const {
-	return windowHeight;
 }
 
 float Render::getMoveHistorySize() const {

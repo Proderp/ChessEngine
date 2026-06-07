@@ -7,6 +7,7 @@ class Render {
 private:
 	const BoardMetrics& boardMetrics;
 	const ColourContainer colours;
+	const UIConsts uiConsts;
 		
 	sf::Font font;
 	std::array<sf::Texture, 3> sideChoiceTextures;
@@ -90,6 +91,7 @@ private:
 	float scaleValue;
 
 	sf::RenderWindow& window;
+	sf::Vector2f& windowSize;
 
 	std::unordered_map<PieceType, int> whiteGraveyardCount;
 	std::unordered_map<PieceType, int> blackGraveyardCount;
@@ -98,7 +100,6 @@ private:
 
 	void loadFont();
 
-	void setWindowInfo(const unsigned int windowWidth, const unsigned int windowHeight);
 	void setTimerText();
 	void setTimerBackgrounds();
 	void setMoveCircle();
@@ -130,9 +131,9 @@ public:
 	float getRowDistance() const;
 	void setRowDistance(const float newDistance);
 
-	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, const Side playerSide);
+	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f windowSize, const Side playerSide);
 
-	void setInfo(const unsigned int windowWidth, const unsigned int windowHeight);
+	void setInfo();
 
 	void drawBoard(const std::array<std::array<Square, 8>, 8>& board, const int selectedRank, const int selectedFile, const std::optional<Move>& lastMove);
 
@@ -147,7 +148,8 @@ public:
 		const sf::Vector2f animationPosition,
 		const bool hasSecondaryAnimation,
 		const int secAnimRank, const int secAnimFile,
-		const sf::Vector2f secAnimPosition);
+		const sf::Vector2f secAnimPosition
+	);
 
 	void drawLegalMoves(const std::vector<Move>& currentMoves);
 
@@ -161,11 +163,11 @@ public:
 
 	void updateGraveyardCounts(const std::vector<Piece>& whiteGraveyard, const std::vector<Piece>& blackGraveyard);
 
-	void drawMoveHistory(const std::vector<Turn>& turns);
+	void drawMoveHistory(const std::vector<Turn>& turns, const HistoryViewportMetrics& historyViewportMetrics);
 
 	void drawResignationButton(const Button& resignationButton);
 
-	void drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout);
+	void drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout, const HistoryViewportMetrics& historyViewportMetrics);
 
 	void drawMainMenu(const MainMenuLayout& mainMenuLayout);
 

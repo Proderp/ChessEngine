@@ -1,5 +1,11 @@
 #include "includes.hpp"
 
+struct UIConsts {
+	const float margin{16.f};
+	const float padding{10.f};
+	const float spacing{10.f};
+};
+
 struct Button {
 	Button() {};
 	sf::Vector2f position;

@@ -4,9 +4,7 @@ App::App() :
     window(sf::VideoMode({ DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT }), "Chess"),
     windowSize(sf::Vector2f(window.getSize())),
     ui(window, windowSize),
-    renderer(window, game.playerSide),
-    boardMetrics(renderer.getBoardMetrics()),
-    historyViewportMetrics(renderer.getHistoryViewportMetrics())
+    renderer(ui.getBoardMetrics(), window, windowSize, game.playerSide)
 {
     window.setFramerateLimit(60); 
     
@@ -485,7 +483,7 @@ void App::limitScroll() {
     const float halfViewHeight = ui.getHistoryView().getSize().y / 2.f;
 
     const float minCenterY = halfViewHeight;
-    const float maxCenterY = std::max(minCenterY, renderer.getMoveHistorySize() - halfViewHeight + renderer.getMargin());
+    const float maxCenterY = std::max(minCenterY, renderer.getMoveHistorySize() - halfViewHeight + ui.getMargin());
 
     sf::Vector2f center = ui.getHistoryView().getCenter();
 
@@ -599,7 +597,7 @@ void App::renderPlayingState() {
 
     if (game.getIsConfirmingResignation()) {
         ui.setUIView();
-        renderer.drawResignationConfirmation(ui.getResignationConfirmationLayout());
+        renderer.drawResignationConfirmation(ui.getResignationConfirmationLayout(), ui.getHistoryViewportMetrics());
     }
     else {
         renderHistoryView();
@@ -628,12 +626,12 @@ void App::renderBoardView() {
     }
 }
 void App::renderHistoryView() {
-    sf::RectangleShape testRect({ historyViewportMetrics.historyViewWidth, 5'000.f });
+    sf::RectangleShape testRect({ ui.getHistoryViewportMetrics().historyViewWidth, 5'000.f });
     testRect.setFillColor(sf::Color(100, 149, 237, 100));
 
     ui.setHistoryView();
     window.draw(testRect);
-    renderer.drawMoveHistory(game.getMoveHistory());
+    renderer.drawMoveHistory(game.getMoveHistory(), ui.getHistoryViewportMetrics());
 }
 void App::renderUIView() {
     ui.setUIView();

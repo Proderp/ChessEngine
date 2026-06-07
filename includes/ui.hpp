@@ -10,6 +10,8 @@ private:
 	sf::View uiView;
 	sf::View historyView;
 
+	const UIConsts uiConsts;
+
     Button resignationButton;
     
     PromoMenuLayout promoMenuLayout;	
@@ -24,11 +26,7 @@ private:
     HistoryViewportMetrics historyViewportMetrics;
 	BoardMetrics boardMetrics;
 
-	const float margin{16.f};
-	const float padding{10.f};
-	const float spacing{10.f};
-
-	void recalibrateViews(const sf::Vector2f newWindowSize);
+	void recalibrateViews();
 
     void resizeResignationButton();
 	
@@ -56,6 +54,8 @@ public:
     UI(sf::RenderWindow& window, const sf::Vector2f& windowSize);
 
     void updateUI();
+
+	const float getMargin() const;
 
 	void setUIView();
 	void setHistoryView();
