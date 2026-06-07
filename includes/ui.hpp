@@ -27,7 +27,7 @@ private:
 	const float padding{10.f};
 	const float spacing{10.f};
 
-	void recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight);
+	void recalibrateViews(const sf::Vector2f newWindowSize);
 
     void resizeResignationButton();
 	

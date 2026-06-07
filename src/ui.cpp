@@ -25,15 +25,14 @@ void UI::updateUI() {
     resizeGameOverLayout();
 }
 
-void UI::recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight) {
-    const sf::Vector2f centerOfWindow = { static_cast<float>(windowWidth) / 2.f, static_cast<float>(windowHeight) / 2.f };
-    const sf::Vector2f sizeOfWindow = static_cast<sf::Vector2f>(sf::Vector2u{windowWidth, windowHeight});
+void UI::recalibrateViews(const sf::Vector2f newWindowSize) {
+    const sf::Vector2f centerOfWindow = { newWindowSize.x / 2.f, newWindowSize.y / 2.f };
 
     boardView.setCenter(centerOfWindow);
-    boardView.setSize(sizeOfWindow);
+    boardView.setSize(newWindowSize);
 
     uiView.setCenter(centerOfWindow);
-    uiView.setSize(sizeOfWindow);
+    uiView.setSize(newWindowSize);
 
     historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
     historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
