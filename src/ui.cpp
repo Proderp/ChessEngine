@@ -202,3 +202,39 @@ void UI::resizeGameOverLayout() {
     resizeButtonBounds(gameOverLayout.playAgainButton);
     resizeButtonBounds(gameOverLayout.mainMenuButton);
 }
+
+const Button& UI::getResignationButton() {
+    return resignationButton;
+}
+
+const PromoMenuLayout& UI::getPromoMenuLayout() {
+    return promoMenuLayout;
+}
+
+const ResignationConfirmationLayout& UI::getResignationConfirmationLayout() {
+    return resignationConfirmationLayout;
+}
+
+const MainMenuLayout& UI::getMainMenuLayout() {
+    return mainMenuLayout; 
+}
+
+const PrePlayLayout& UI::getPrePlayLayout() {
+    return prePlayLayout;
+}
+
+const SettingsLayout& UI::getSettingsLayout() {
+    return settingsLayout; 
+}
+
+const GameOverLayout& UI::getGameOverLayout() {
+    return gameOverLayout;
+}
+
+const HistoryViewportMetrics& UI::getHistoryViewportMetrics() {
+    return historyViewportMetrics;
+}
+
+const BoardMetrics& UI::getBoardMetrics() {
+    return boardMetrics; 
+}

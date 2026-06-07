@@ -50,4 +50,17 @@ public:
     UI(sf::RenderWindow& window, const sf::Vector2f& windowSize);
 
     void updateUI();
+
+	const Button& getResignationButton();
+
+	const PromoMenuLayout& getPromoMenuLayout();
+	const ResignationConfirmationLayout& getResignationConfirmationLayout();
+
+	const MainMenuLayout& getMainMenuLayout();
+	const PrePlayLayout& getPrePlayLayout();
+	const SettingsLayout& getSettingsLayout();
+	const GameOverLayout& getGameOverLayout();
+
+	const HistoryViewportMetrics& getHistoryViewportMetrics();
+	const BoardMetrics& getBoardMetrics();
 };
