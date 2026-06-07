@@ -2,11 +2,15 @@
 #include "game.hpp"
 #include "render.hpp"
 #include "includes.hpp"
+#include "ui.hpp"
 
 class App {
 private:
 	sf::RenderWindow window;
+	sf::Vector2f windowSize;
 	GameState currentState = GameState::MainMenu;
+
+	UI ui;
 
 	Game game;
 	Render renderer;
@@ -29,6 +33,8 @@ private:
 	sf::Vector2f secondaryAnimatedPosition;
 
 	sf::Image windowIcon;
+
+	void handleResize(const sf::Vector2f newWindowSize);
 	
 	void handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent);
 

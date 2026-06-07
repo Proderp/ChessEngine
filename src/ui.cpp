@@ -6,6 +6,8 @@ UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
 {}
 
 void UI::updateUI() {
+    recalibrateViews(windowWidth, windowHeight);
+    
     resizeResignationButton();
 
     resizeResignationConfirmationLayout();
@@ -21,10 +23,6 @@ void UI::updateUI() {
     resizeSettingsLayout();
 
     resizeGameOverLayout();
-}
-
-void UI::handleResize(const unsigned int windowWidth, const unsigned int windowHeight) {
-    recalibrateViews(windowWidth, windowHeight);
 }
 
 void UI::recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight) {
