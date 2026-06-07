@@ -10,14 +10,6 @@ App::App() :
 {
     window.setFramerateLimit(60); 
     
-    boardView = window.getDefaultView();
-    uiView = window.getDefaultView();
-    historyView = window.getDefaultView();
-    
-    historyView.setViewport(renderer.getHistoryViewport());
-    historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
-    historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
-
     if (windowIcon.loadFromFile("assets/window/window-icon.png")) {
         window.setIcon(windowIcon);
     }
@@ -439,8 +431,8 @@ void App::startAnimation(const Move& lastMove) {
 }
 
 void App::handleResignation(const sf::Vector2f uiPos) {
-    const bool userConfirmedResignation = ui.resignationConfirmationLayout.confirmButton.bounds.contains(uiPos);
-    const bool userCancelledResignation = ui.resignationConfirmationLayout.cancelButton.bounds.contains(uiPos);
+    const bool userConfirmedResignation = ui.getResignationConfirmationLayout().confirmButton.bounds.contains(uiPos);
+    const bool userCancelledResignation = ui.getResignationConfirmationLayout().cancelButton.bounds.contains(uiPos);
 
     if (userConfirmedResignation) {
         const Side winner = (game.playerSide == Side::White) ? Side::Black : Side::White;

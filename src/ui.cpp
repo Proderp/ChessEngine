@@ -3,7 +3,15 @@
 UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
     window(window),
     windowSize(windowSize)
-{}
+{
+    boardView = window.getDefaultView();
+    uiView = window.getDefaultView();
+    historyView = window.getDefaultView();
+    
+    historyView.setViewport(renderer.getHistoryViewport());
+    historyView.setSize({ historyViewportMetrics.historyViewWidth, historyViewportMetrics.historyViewHeight });
+    historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
+}
 
 void UI::updateUI() {
     recalibrateViews();
@@ -40,7 +48,7 @@ void UI::recalibrateViews(const sf::Vector2f newWindowSize) {
 }
 
 void UI::resizeResignationButton() {
-    resignationButton.position = { renderer.getWindowWidth() - boardMetrics.tileSize, renderer.getWindowHeight() - boardMetrics.offsetY};
+    resignationButton.position = { windowSize.x - boardMetrics.tileSize, windowSize.y - boardMetrics.offsetY};
     resignationButton.size = { boardMetrics.tileSize, boardMetrics.tileSize };
     resizeButtonBounds(resignationButton);
 }
@@ -68,19 +76,19 @@ void UI::resizeLayoutButtonBounds() {
 }
 
 void UI::resizePromoLayout() {
-    promoMenuLayout.panelPosition = { boardMetrics.boardRightEdge + renderer.getMargin(), boardMetrics.boardTopEdge};
-    promoMenuLayout.panelSize = { boardMetrics.tileSize + (renderer.getPadding() * 2.f), (4.f * boardMetrics.tileSize) + (renderer.getPadding() * 2.f) + (3.f * renderer.getSpacing()) };
+    promoMenuLayout.panelPosition = { boardMetrics.boardRightEdge + margin, boardMetrics.boardTopEdge};
+    promoMenuLayout.panelSize = { boardMetrics.tileSize + (padding * 2.f), (4.f * boardMetrics.tileSize) + (padding * 2.f) + (3.f * spacing) };
 
     for (std::size_t i = 0; i < promoMenuLayout.slotRects.size(); i++) {
         sf::FloatRect rect{};
-        rect.position = { promoMenuLayout.panelPosition.x + renderer.getPadding(), promoMenuLayout.panelPosition.y + renderer.getPadding() + (static_cast<float>(i) * (boardMetrics.tileSize + renderer.getSpacing()))};
+        rect.position = { promoMenuLayout.panelPosition.x + padding, promoMenuLayout.panelPosition.y + padding + (static_cast<float>(i) * (boardMetrics.tileSize + spacing))};
         rect.size = { boardMetrics.tileSize, boardMetrics.tileSize };
         promoMenuLayout.slotRects[i] = rect;
     }
 }
 void UI::recalculateMoveHistorySize() {
     renderer.setRowDistance(boardMetrics.tileSize / 2.f);
-    renderer.setMoveHistorySize(game.getMoveHistory().size() * renderer.getRowDistance() + renderer.getMargin());
+    renderer.setMoveHistorySize(game.getMoveHistory().size() * renderer.getRowDistance() + margin);
 }
 
 void UI::resizeMainMenuLayout() {
@@ -112,7 +120,7 @@ void UI::resizeButtonBounds(Button& button) {
 void UI::resizePrePlayLayout() {
     const sf::Vector2f buttonSize = { boardMetrics.tileSize * 1.25f, boardMetrics.tileSize * 1.25f};
 
-    float currentXPosition = renderer.getWindowWidth() * 0.4f + buttonSize.x / 2.f;
+    float currentXPosition = windowSize.x * 0.4f + buttonSize.x / 2.f;
     float currentYPosition = buttonSize.y;
     
     auto resizeSingleButton = [&](Button* button) {
@@ -124,7 +132,7 @@ void UI::resizePrePlayLayout() {
     };
 
     auto changePositions = [&]() {
-        currentXPosition = renderer.getWindowWidth() * 0.4f + buttonSize.x / 2.f;
+        currentXPosition = windowSize.x * 0.4f + buttonSize.x / 2.f;
         currentYPosition += buttonSize.y * 1.5f;
     };
 
@@ -148,20 +156,20 @@ void UI::resizePrePlayLayout() {
     }
 
     const sf::Vector2f startGameButtonSize = { boardMetrics.tileSize * 3.f, boardMetrics.tileSize * 1.25f };
-    const sf::Vector2f startGameButtonPosition = { renderer.getWindowWidth() / 2.f, renderer.getWindowHeight() - startGameButtonSize.y };
+    const sf::Vector2f startGameButtonPosition = { windowSize.x / 2.f, windowSize.y - startGameButtonSize.y };
     prePlayLayout.startGameButton.size = startGameButtonSize;
     prePlayLayout.startGameButton.position = startGameButtonPosition;
     resizeButtonBounds(prePlayLayout.startGameButton);
 
     const sf::Vector2f backButtonSize = { boardMetrics.tileSize * 1.5f, boardMetrics.tileSize * 0.75f };
     prePlayLayout.backButton.size = backButtonSize;
-    prePlayLayout.backButton.position = { renderer.getMargin() + backButtonSize.x / 2.f, renderer.getMargin() + backButtonSize.y / 2.f };
+    prePlayLayout.backButton.position = { margin + backButtonSize.x / 2.f, margin + backButtonSize.y / 2.f };
     resizeButtonBounds(prePlayLayout.backButton);
 }
 
 void UI::resizeSettingsLayout() {
     const sf::Vector2f buttonSize = { boardMetrics.tileSize * 1.25f, boardMetrics.tileSize * 1.25f };
-    float xPosition = renderer.getWindowWidth() / 2.f + buttonSize.x / 2.f;
+    float xPosition = windowSize.x / 2.f + buttonSize.x / 2.f;
     float currentYPosition = buttonSize.y;
 
     for (Button* toggleButton : settingsLayout.toggleButtons) {
@@ -174,15 +182,15 @@ void UI::resizeSettingsLayout() {
 
     const sf::Vector2f backButtonSize = { boardMetrics.tileSize * 1.5f, boardMetrics.tileSize * 0.75f };
     settingsLayout.backButton.size = backButtonSize;
-    settingsLayout.backButton.position = { renderer.getMargin() + backButtonSize.x / 2.f, renderer.getMargin() + backButtonSize.y / 2.f };
+    settingsLayout.backButton.position = { margin + backButtonSize.x / 2.f, margin + backButtonSize.y / 2.f };
     resizeButtonBounds(settingsLayout.backButton);
 }
 
 void UI::resizeGameOverLayout() {
-    const sf::Vector2f layoutSize = { renderer.getWindowWidth() * 0.4f, renderer.getWindowHeight() * 0.4f };
+    const sf::Vector2f layoutSize = { windowSize.x * 0.4f, windowSize.y * 0.4f };
     gameOverLayout.size = layoutSize;
 
-    const sf::Vector2f centerOfWindow = { renderer.getWindowWidth() / 2.f, renderer.getWindowHeight() / 2.f };
+    const sf::Vector2f centerOfWindow = { windowSize.x / 2.f, windowSize.y / 2.f };
     gameOverLayout.position = centerOfWindow;
 
     const sf::Vector2f buttonSize = { layoutSize.x * 0.3f, layoutSize.y * 0.25f };
