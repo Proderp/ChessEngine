@@ -134,7 +134,7 @@ void App::handleEvents() {
 
 void App::handleResize() {
     windowSize = static_cast<sf::Vector2f>(window.getSize());
-    
+
     const size_t turnsSize = game.getMoveHistory().size();
     ui.updateUI(turnsSize);
 }
@@ -494,6 +494,7 @@ void App::limitScroll() {
 
     ui.setHistoryViewCenter(center);
 }
+
 void App::scrollToBottom() {
     const size_t turnsSize = game.getMoveHistory().size();
     ui.recalculateMoveHistorySize(turnsSize);
@@ -608,6 +609,7 @@ void App::renderPlayingState() {
 
     renderUIView();
 }
+
 void App::renderBoardView() {
     ui.setBoardView();
     renderer.drawBoard(game.getBoard(), game.getSelectedRank(), game.getSelectedFile(), game.getLastMove());
@@ -628,14 +630,12 @@ void App::renderBoardView() {
         renderer.drawLegalMoves(game.getSelectedPieceMoves());
     }
 }
-void App::renderHistoryView() {
-    sf::RectangleShape testRect({ ui.getHistoryViewportMetrics().historyViewWidth, 5'000.f });
-    testRect.setFillColor(sf::Color(100, 149, 237, 100));
 
+void App::renderHistoryView() {
     ui.setHistoryView();
-    window.draw(testRect);
     renderer.drawMoveHistory(game.getMoveHistory(), ui.getHistoryViewportMetrics());
 }
+
 void App::renderUIView() {
     ui.setUIView();
     renderer.drawTimers(game.getWhiteTime(), game.getBlackTime());

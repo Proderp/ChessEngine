@@ -1,6 +1,6 @@
 #include "render.hpp"
 
-Render::Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f windowSize, const Side playerSide) : 
+Render::Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f& windowSize, const Side playerSide) : 
 	boardMetrics(boardMetrics),
 	window(window),
 	windowSize(windowSize),
@@ -8,7 +8,6 @@ Render::Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::V
 {
 	loadTextures();
 	loadFont();
-	setInfo();
 }
 
 void Render::loadTextures() {
@@ -67,23 +66,6 @@ void Render::loadFont() {
 	if (!font.openFromFile("assets/fonts/IosevkaCharonMono-Medium.ttf")) {
 		std::cerr << "Error: Couldn't load font!" << std::endl;
 	}
-}
-
-void Render::setInfo() {
-	setTimerText();
-	setTimerBackgrounds();
-	setMoveCircle();
-	setMoveHistoryText();
-	setPromoMenuBackground();
-	setPromoMenuSlots();
-	setRankAndFiles();
-	setResignationConfirmationText();
-	setMainMenuText();
-	setPrePlayPage();
-	setSettingsPage();
-	setGameOverLayout();
-
-	boardSquareRect.setSize({ boardMetrics.tileSize, boardMetrics.tileSize });
 }
 
 void Render::setTimerText() {
@@ -188,6 +170,7 @@ void Render::setPrePlayPage() {
 
 void Render::setSettingsPage() {
 	settingsTextXPosition = windowSize.x * 0.45f;
+	prePlayAndSettingsCharSize = static_cast<unsigned int>(boardMetrics.tileSize / 2.f);
 }
 
 void Render::setGameOverLayout() {
@@ -196,6 +179,8 @@ void Render::setGameOverLayout() {
 }
 
 void Render::drawBoard(const std::array<std::array<Square, 8>, 8> &board, const int selectedRank, const int selectedFile, const std::optional<Move>& lastMove) {
+	boardSquareRect.setSize({ boardMetrics.tileSize, boardMetrics.tileSize });
+	
 	for (int rank = 0; rank < RANKS; rank++) {
 		for (int file = 0; file < FILES; file++) {
 
@@ -285,6 +270,8 @@ void Render::drawPieces(
 }
 
 void Render::drawLegalMoves(const std::vector<Move>& currentMoves) {
+	setMoveCircle();
+
 	for (const Move& move : currentMoves) {
 		const int drawnRank = (playerSide == Side::Black) ? 7 - move.toRank : move.toRank;
 		const int drawnFile = (playerSide == Side::Black) ? 7 - move.toFile : move.toFile;
@@ -294,6 +281,9 @@ void Render::drawLegalMoves(const std::vector<Move>& currentMoves) {
 }
 
 void Render::drawPromoMenu(const std::optional<Side>& promoSide) {
+	setPromoMenuBackground();
+	setPromoMenuSlots();
+	
 	if (!promoSide.has_value()) 
 		return;
 
@@ -336,6 +326,8 @@ void Render::setTextOrigin(sf::Text& text) {
 }
 
 void Render::drawRanksAndFiles(const Side currentTurn) {
+	setRankAndFiles();
+
 	for (int i = 0; i < RANKS; i++) {
 		std::string rankString(1, (playerSide == Side::White) ? ('8' - i) : ('1' + i));
 		std::string fileString(1, (playerSide == Side::White) ? ('a' + i) : ('h' - i));
@@ -349,7 +341,9 @@ void Render::drawRanksAndFiles(const Side currentTurn) {
 }
 
 void Render::drawTimers(const float whiteTimeInSeconds, const float blackTimeInSeconds) {
-	
+	setTimerText();
+	setTimerBackgrounds();
+
 	auto formatTime = [&](const float timeInSeconds) -> std::string {
 		timeFormatter.str("");
 		if (timeInSeconds <= 0.f) return "0.0";
@@ -524,6 +518,12 @@ void Render::updateGraveyardCounts(const std::vector<Piece>& whiteGraveyard, con
 }
 
 void Render::drawMoveHistory(const std::vector<Turn>& turns, const HistoryViewportMetrics& historyViewportMetrics) {
+	setMoveHistoryText();
+
+    sf::RectangleShape testRect({ historyViewportMetrics.historyViewWidth, 5'000.f });
+    testRect.setFillColor(sf::Color(100, 149, 237, 100));
+	window.draw(testRect);
+	
 	const float startingXPosition = uiConsts.margin;
 	float currentXPosition = startingXPosition;
 	float currentYPosition = uiConsts.margin;
@@ -561,6 +561,8 @@ void Render::drawResignationButton(const Button& resignationButton) {
 }
 
 void Render::drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout, const HistoryViewportMetrics& historyViewportMetrics) {
+	setResignationConfirmationText();
+
 	auto formatRect = [&](const sf::Vector2f size, const sf::Color backgroundColour, const sf::Vector2f position) {
 		sf::RectangleShape rect{ size };
 		rect.setFillColor(backgroundColour);
@@ -591,6 +593,8 @@ void Render::drawResignationConfirmation(const ResignationConfirmationLayout& re
 }
 
 void Render::drawMainMenu(const MainMenuLayout& mainMenuLayout) {
+	setMainMenuText();
+	
 	window.draw(mainMenuTitleText);
 
 	auto formatRect = [&](const sf::Vector2f position, const sf::Color colour) {
@@ -616,6 +620,8 @@ void Render::drawMainMenu(const MainMenuLayout& mainMenuLayout) {
 }
 
 void Render::drawPrePlayPage(const PrePlayLayout& prePlayLayout, const PlayerChoices& choices) {
+	setPrePlayPage();
+	
 	const sf::Vector2f buttonSize = prePlayLayout.sideButtons[0]->size;
 	sf::Sprite iconSprite{ sideChoiceTextures[0] };
 
@@ -747,6 +753,8 @@ void Render::drawPrePlayPage(const PrePlayLayout& prePlayLayout, const PlayerCho
 }
 
 void Render::drawSettingsPage(const SettingsLayout& settingsLayout, const Settings& settings) {
+	setSettingsPage();
+
 	const sf::Vector2f toggleButtonSize = settingsLayout.toggleButtons[0]->size;
 	const std::array<bool, 3> toggleStates = { settings.fullScreen, settings.showLegalMoves, settings.autoPromoteToQueen };
 	const std::array<std::string, 3> toggleLabels = { "Full Screen", "Show Legal Moves", "Auto-Promote to Queen" };
@@ -774,7 +782,6 @@ void Render::drawSettingsPage(const SettingsLayout& settingsLayout, const Settin
 		window.draw(settingsButtonRect);
 		window.draw(toggleText);
 	};
-
 
 	for (std::size_t toggleIndex = 0; toggleIndex < settingsLayout.toggleButtons.size(); toggleIndex++) {
 		const Button& currentButton = *settingsLayout.toggleButtons[toggleIndex];
@@ -810,6 +817,8 @@ void Render::drawSettingsPage(const SettingsLayout& settingsLayout, const Settin
 }
 
 void Render::drawGameOverLayout(const GameOverLayout& gameOverLayout, const std::optional<GameOverType> reason, const std::optional<Side> winner) {
+	setGameOverLayout();
+
 	window.draw(tintedGlassRect);
 
 	gameOverLayoutBackground.setSize(gameOverLayout.size);

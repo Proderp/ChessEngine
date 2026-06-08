@@ -121,9 +121,7 @@ private:
 public:
 	Side playerSide;
 
-	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f windowSize, const Side playerSide);
-
-	void setInfo();
+	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f& windowSize, const Side playerSide);
 
 	void drawBoard(const std::array<std::array<Square, 8>, 8>& board, const int selectedRank, const int selectedFile, const std::optional<Move>& lastMove);
 

@@ -16,28 +16,28 @@ UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
 }
 
 void UI::updateUI(const size_t turnsSize) {
-    recalibrateViews();
-    
-    resizeResignationButton();
-
-    resizeResignationConfirmationLayout();
-
-    resizeLayoutButtons();
-
-    resizePromoLayout();
-    recalculateMoveHistorySize(turnsSize);
-
-    resizeMainMenuLayout();
-    
-    resizePrePlayLayout();
-    resizeSettingsLayout();
-
-    resizeGameOverLayout();
-
     setBoardSizes();
 	setOffsets();
 	setBoardEdges();
 	setHistoryViewport();
+    
+    resizeResignationButton();
+    
+    resizeResignationConfirmationLayout();
+    
+    resizeLayoutButtons();
+    
+    resizePromoLayout();
+    recalculateMoveHistorySize(turnsSize);
+    
+    resizeMainMenuLayout();
+    
+    resizePrePlayLayout();
+    resizeSettingsLayout();
+    
+    resizeGameOverLayout();
+    
+    recalibrateViews();
 }
 
 void UI::recalibrateViews() {
@@ -224,7 +224,6 @@ void UI::setBoardSizes() {
 
 	boardMetrics.boardSize = smallerDimension * 0.8f;
 	boardMetrics.tileSize = boardMetrics.boardSize / 8.f;
-	boardMetrics.tileSize = boardMetrics.tileSize;
 
 	boardMetrics.circleSize = boardMetrics.tileSize / 8.f;
 }
