@@ -4,7 +4,7 @@ UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
     window(window),
     windowSize(windowSize)
 {
-    updateUI();
+    updateUI(0);
 
     boardView = window.getDefaultView();
     uiView = window.getDefaultView();
@@ -15,7 +15,7 @@ UI::UI(sf::RenderWindow& window, const sf::Vector2f& windowSize) :
     historyView.setCenter({ historyViewportMetrics.historyViewWidth / 2.f, historyViewportMetrics.historyViewHeight / 2.f });
 }
 
-void UI::updateUI() {
+void UI::updateUI(const size_t turnsSize) {
     recalibrateViews();
     
     resizeResignationButton();
@@ -25,7 +25,7 @@ void UI::updateUI() {
     resizeLayoutButtons();
 
     resizePromoLayout();
-    recalculateMoveHistorySize();
+    recalculateMoveHistorySize(turnsSize);
 
     resizeMainMenuLayout();
     
@@ -94,9 +94,9 @@ void UI::resizePromoLayout() {
     }
 }
 
-void UI::recalculateMoveHistorySize() {
-    renderer.setRowDistance(boardMetrics.tileSize / 2.f);
-    renderer.setMoveHistorySize(game.getMoveHistory().size() * renderer.getRowDistance() + uiConsts.margin);
+void UI::recalculateMoveHistorySize(const size_t turnsSize) {
+    historyViewportMetrics.rowDistance = boardMetrics.tileSize / 2.f;
+    historyViewportMetrics.moveHistorySize = turnsSize * historyViewportMetrics.rowDistance + uiConsts.margin;
 }
 
 void UI::resizeMainMenuLayout() {
@@ -228,14 +228,17 @@ void UI::setBoardSizes() {
 
 	boardMetrics.circleSize = boardMetrics.tileSize / 8.f;
 }
+
 void UI::setOffsets() {
 	boardMetrics.offsetX = boardMetrics.tileSize * 1.5f;
 	boardMetrics.offsetY = ((windowSize.y - boardMetrics.boardSize) / 2.f) + (boardMetrics.tileSize / 2.f);
 }
+
 void UI::setBoardEdges() {
 	boardMetrics.boardRightEdge = boardMetrics.offsetX + ((FILES - 1) * boardMetrics.tileSize) + (boardMetrics.tileSize / 2.f);
 	boardMetrics.boardTopEdge = boardMetrics.offsetY - (boardMetrics.tileSize / 2.f);
 }
+
 void UI::setHistoryViewport() {
 	historyViewportMetrics.historyViewStartX = boardMetrics.offsetX + boardMetrics.boardSize;
 	historyViewportMetrics.historyViewStartY = boardMetrics.offsetY + boardMetrics.tileSize;

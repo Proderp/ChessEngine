@@ -134,7 +134,9 @@ void App::handleEvents() {
 
 void App::handleResize() {
     windowSize = static_cast<sf::Vector2f>(window.getSize());
-    ui.updateUI();
+    
+    const size_t turnsSize = game.getMoveHistory().size();
+    ui.updateUI(turnsSize);
 }
 
 void App::handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent) {
@@ -483,7 +485,7 @@ void App::limitScroll() {
     const float halfViewHeight = ui.getHistoryView().getSize().y / 2.f;
 
     const float minCenterY = halfViewHeight;
-    const float maxCenterY = std::max(minCenterY, renderer.getMoveHistorySize() - halfViewHeight + ui.getMargin());
+    const float maxCenterY = std::max(minCenterY, ui.getHistoryViewportMetrics().moveHistorySize - halfViewHeight + ui.getMargin());
 
     sf::Vector2f center = ui.getHistoryView().getCenter();
 
@@ -493,7 +495,8 @@ void App::limitScroll() {
     ui.setHistoryViewCenter(center);
 }
 void App::scrollToBottom() {
-    recalculateMoveHistorySize();
+    const size_t turnsSize = game.getMoveHistory().size();
+    ui.recalculateMoveHistorySize(turnsSize);
     ui.moveHistoryView({ 0.f, 99999.f });
     limitScroll();
 }

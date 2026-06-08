@@ -152,7 +152,8 @@ void Render::setRankAndFiles() {
 }
 
 void Render::setResignationConfirmationText() {
-	areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
+	// areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
+	areYouSureCharSize = 20.f;	
 	buttonCharSize = areYouSureCharSize / 2;
 
 	areYouSureText.setCharacterSize(areYouSureCharSize);
@@ -530,8 +531,6 @@ void Render::drawMoveHistory(const std::vector<Turn>& turns, const HistoryViewpo
 	const float whiteColumn = historyViewportMetrics.historyViewWidth * 0.3f;
 	const float blackColumn = whiteColumn * 2.f;
 
-	moveHistorySize = turns.size() * rowDistance + uiConsts.margin;
-
 	auto drawText = [&](const std::string& text, const float xPosition) {
 		stamp.setString(text);
 		stamp.setPosition({xPosition, currentYPosition});
@@ -547,7 +546,7 @@ void Render::drawMoveHistory(const std::vector<Turn>& turns, const HistoryViewpo
 			drawText(turn.blackMove, blackColumn);
 		}
 
-		currentYPosition += rowDistance;
+		currentYPosition += historyViewportMetrics.rowDistance;
 	}
 }
 
@@ -898,20 +897,4 @@ void Render::drawGameOverLayout(const GameOverLayout& gameOverLayout, const std:
 	setTextOrigin(gameOverText);
 	gameOverText.setPosition({ gameOverLayout.position.x, gameOverLayout.position.y - (gameOverLayout.size.y * 0.08f) });
 	window.draw(gameOverText);
-}
-
-float Render::getMoveHistorySize() const {
-	return moveHistorySize;
-}
-
-void Render::setMoveHistorySize(const float newSize) {
-	moveHistorySize = newSize;
-}
-
-float Render::getRowDistance() const {
-	return rowDistance;
-}
-
-void Render::setRowDistance(const float newDistance) {
-	rowDistance = newDistance;
 }

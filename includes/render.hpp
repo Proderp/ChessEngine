@@ -54,7 +54,8 @@ private:
 
 	sf::Text stamp{ font, "" };
 
-	unsigned int areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
+	// unsigned int areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
+	unsigned int areYouSureCharSize = 20.f;
 	unsigned int buttonCharSize = areYouSureCharSize / 2;
 	sf::Text areYouSureText{ font, "Are you sure you\nwant to resign?", areYouSureCharSize };
 	sf::Text cancelText{ font, "Cancel", buttonCharSize };
@@ -117,19 +118,8 @@ private:
 
 	void setTextOrigin(sf::Text& text);
 
-	float moveHistorySize{};
-	float rowDistance{};
-
 public:
 	Side playerSide;
-
-	const sf::FloatRect& getHistoryViewport() const;
-
-	float getMoveHistorySize() const;
-	void setMoveHistorySize(const float newSize);
-
-	float getRowDistance() const;
-	void setRowDistance(const float newDistance);
 
 	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f windowSize, const Side playerSide);
 

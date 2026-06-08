@@ -1,3 +1,4 @@
+#pragma once
 #include "includes.hpp"
 #include "ui-elements.hpp"
 
@@ -35,41 +36,42 @@ private:
 	void resizeLayoutButtonBounds();
 
 	void resizePromoLayout();
-	void recalculateMoveHistorySize();
-
+	
 	void resizeMainMenuLayout();
 	void resizeButtonBounds(Button& button);
-
+	
 	void resizePrePlayLayout();
 	void resizeSettingsLayout();
-
+	
 	void resizeGameOverLayout();
-
+	
 	void setBoardSizes();
 	void setOffsets();
 	void setBoardEdges();
 	void setHistoryViewport();
-
-public:
+	
+	public:
     UI(sf::RenderWindow& window, const sf::Vector2f& windowSize);
+	
+    void updateUI(const size_t turnsSize);
 
-    void updateUI();
-
+	void recalculateMoveHistorySize(const size_t turnsSize);
+	
 	const float getMargin() const;
-
+	
 	void setUIView();
 	void setHistoryView();
 	void setBoardView();
-
+	
 	const sf::View& getUIView();	
 	const sf::View& getHistoryView();
 	const sf::View& getBoardView();
-
+	
 	void moveHistoryView(const sf::Vector2f position);
 	void setHistoryViewCenter(const sf::Vector2f center);
-
+	
 	const Button& getResignationButton();
-
+	
 	const PromoMenuLayout& getPromoMenuLayout();
 	const ResignationConfirmationLayout& getResignationConfirmationLayout();
 

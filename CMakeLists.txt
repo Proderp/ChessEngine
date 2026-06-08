@@ -22,6 +22,8 @@ set(
     src/game-elements.cpp
     src/game.cpp
     src/render.cpp
+    src/ui-elements.cpp
+    src/ui.cpp
 )
 
 add_library(chess-library ${SOURCE_FILES})

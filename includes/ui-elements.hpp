@@ -1,3 +1,4 @@
+#pragma once
 #include "includes.hpp"
 
 struct UIConsts {
@@ -124,4 +125,7 @@ struct HistoryViewportMetrics {
 
 	float viewportWidthPercentage{};
 	float viewportHeightPercentage{};
+
+	float rowDistance{};
+	float moveHistorySize{};
 };
