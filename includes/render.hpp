@@ -1,13 +1,14 @@
 #pragma once
 #include "includes.hpp"
 #include "game.hpp"
+#include "ui-elements.hpp"
 
 class Render {
 private:
+	const BoardMetrics& boardMetrics;
 	const ColourContainer colours;
-	HistoryViewportMetrics historyViewportMetrics;
-	BoardMetrics boardMetrics;
-	
+	const UIConsts uiConsts;
+		
 	sf::Font font;
 	std::array<sf::Texture, 3> sideChoiceTextures;
 	std::array<sf::Texture, 2> opponentChoiceTextures;
@@ -53,7 +54,8 @@ private:
 
 	sf::Text stamp{ font, "" };
 
-	unsigned int areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
+	// unsigned int areYouSureCharSize = static_cast<unsigned int>(historyViewportMetrics.historyViewWidth * 0.1f);
+	unsigned int areYouSureCharSize = 20.f;
 	unsigned int buttonCharSize = areYouSureCharSize / 2;
 	sf::Text areYouSureText{ font, "Are you sure you\nwant to resign?", areYouSureCharSize };
 	sf::Text cancelText{ font, "Cancel", buttonCharSize };
@@ -90,6 +92,7 @@ private:
 	float scaleValue;
 
 	sf::RenderWindow& window;
+	sf::Vector2f& windowSize;
 
 	std::unordered_map<PieceType, int> whiteGraveyardCount;
 	std::unordered_map<PieceType, int> blackGraveyardCount;
@@ -98,11 +101,6 @@ private:
 
 	void loadFont();
 
-	void setWindowInfo(const unsigned int windowWidth, const unsigned int windowHeight);
-	void setBoardSizes();
-	void setOffsets();
-	void setBoardEdges();
-	void setHistoryViewport();
 	void setTimerText();
 	void setTimerBackgrounds();
 	void setMoveCircle();
@@ -120,40 +118,10 @@ private:
 
 	void setTextOrigin(sf::Text& text);
 
-	float windowWidth = DEFAULT_WINDOW_WIDTH;
-	float windowHeight = DEFAULT_WINDOW_HEIGHT;
-	
-	float margin = 16.f;
-	float padding = 10.f;
-	float spacing = 10.f;
-
-	float moveHistorySize{};
-	float rowDistance{};
-
-	sf::FloatRect historyViewport;
 public:
 	Side playerSide;
 
-	const BoardMetrics& getBoardMetrics() const;
-	const HistoryViewportMetrics& getHistoryViewportMetrics() const;
-
-	const sf::FloatRect& getHistoryViewport() const;
-
-	float getWindowWidth() const;
-	float getWindowHeight() const;
-	float getMargin() const;
-	float getPadding() const;
-	float getSpacing() const;
-
-	float getMoveHistorySize() const;
-	void setMoveHistorySize(const float newSize);
-
-	float getRowDistance() const;
-	void setRowDistance(const float newDistance);
-
-	Render(sf::RenderWindow& window, const Side playerSide);
-
-	void setInfo(const unsigned int windowWidth, const unsigned int windowHeight);
+	Render(const BoardMetrics& boardMetrics, sf::RenderWindow& window, sf::Vector2f& windowSize, const Side playerSide);
 
 	void drawBoard(const std::array<std::array<Square, 8>, 8>& board, const int selectedRank, const int selectedFile, const std::optional<Move>& lastMove);
 
@@ -168,7 +136,8 @@ public:
 		const sf::Vector2f animationPosition,
 		const bool hasSecondaryAnimation,
 		const int secAnimRank, const int secAnimFile,
-		const sf::Vector2f secAnimPosition);
+		const sf::Vector2f secAnimPosition
+	);
 
 	void drawLegalMoves(const std::vector<Move>& currentMoves);
 
@@ -182,11 +151,11 @@ public:
 
 	void updateGraveyardCounts(const std::vector<Piece>& whiteGraveyard, const std::vector<Piece>& blackGraveyard);
 
-	void drawMoveHistory(const std::vector<Turn>& turns);
+	void drawMoveHistory(const std::vector<Turn>& turns, const HistoryViewportMetrics& historyViewportMetrics);
 
 	void drawResignationButton(const Button& resignationButton);
 
-	void drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout);
+	void drawResignationConfirmation(const ResignationConfirmationLayout& resignationConfirmationLayout, const HistoryViewportMetrics& historyViewportMetrics);
 
 	void drawMainMenu(const MainMenuLayout& mainMenuLayout);
 

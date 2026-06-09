@@ -7,5 +7,3 @@ Piece::Piece(Side side, PieceType type, bool hasMoved) : side(side), type(type),
 Square::Square() : colour(Colour::Light) {}
 
 Square::Square(Colour colour) : colour(colour) {} 
-
-Button::Button() {}

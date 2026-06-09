@@ -2,23 +2,19 @@
 #include "game.hpp"
 #include "render.hpp"
 #include "includes.hpp"
+#include "ui.hpp"
 
 class App {
 private:
 	sf::RenderWindow window;
+	sf::Vector2f windowSize;
 	GameState currentState = GameState::MainMenu;
+
+	UI ui;
 
 	Game game;
 	Render renderer;
-
-	UIContainer ui;
-	const BoardMetrics& boardMetrics;
-	const HistoryViewportMetrics& historyViewportMetrics;
-
-	sf::View boardView;
-	sf::View uiView;
-	sf::View historyView;
-
+	
 	sf::Clock frameClock;
 
 	PlayerChoices playerChoices;
@@ -38,27 +34,8 @@ private:
 
 	sf::Image windowIcon;
 
-	void handleResize(const unsigned int windowWidth, const unsigned int windowHeight);
-	void setUIElements();
-	void recalibrateViews(const unsigned int windowWidth, const unsigned int windowHeight);
-
-	void resizeResignationButton();
+	void handleResize();
 	
-	void resizeResignationConfirmationLayout();
-	void resizeLayoutButtons();
-	void resizeLayoutButtonBounds();
-
-	void resizePromoLayout();
-	void recalculateMoveHistorySize();
-
-	void resizeMainMenuLayout();
-	void resizeButtonBounds(Button& button);
-
-	void resizePrePlayLayout();
-	void resizeSettingsLayout();
-
-	void resizeGameOverLayout();
-
 	void handleMouseClick(const sf::Event::MouseButtonPressed& mouseEvent);
 
 	void handleLeftClick(const sf::Event::MouseButtonPressed& mouseEvent);
@@ -71,7 +48,7 @@ private:
 	void startAnimation(const Move& lastMove);
 
 	void handleResignation(const sf::Vector2f uiPos);
-	std::optional<PieceType> promoMenuPick(const sf::Vector2f& uiPos, const std::optional<Side>& promotionSide) const;
+	std::optional<PieceType> promoMenuPick(const sf::Vector2f& uiPos, const std::optional<Side>& promotionSide);
 	void handlePromotion(const sf::Vector2f uiPos);
 
 	void handleScroll(const sf::Event::MouseWheelScrolled& scrollEvent);
